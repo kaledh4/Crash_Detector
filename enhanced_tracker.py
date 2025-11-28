@@ -288,23 +288,38 @@ def generate_ai_insights(metrics: List[Dict]) -> Dict:
         result = response.json()
         
         content = result['choices'][0]['message']['content']
-        # Parse JSON from content (handle potential markdown code blocks)
-        if "```json" in content:
-            content = content.split("```json")[1].split("```")[0].strip()
-        elif "```" in content:
-            content = content.split("```")[1].split("```")[0].strip()
-            
-        parsed_content = json.loads(content)
-        return {
-            "stock_picks": parsed_content.get("stock_picks", "Analysis Failed"),
-            "tasi_opportunities": parsed_content.get("tasi_opportunities", "Analysis Failed")
-        }
+        
+        # Enhanced JSON parsing using Regex to find the first JSON object
+        import re
+        json_match = re.search(r'\{.*\}', content, re.DOTALL)
+        
+        if json_match:
+            json_str = json_match.group(0)
+            parsed_content = json.loads(json_str)
+            return {
+                "stock_picks": parsed_content.get("stock_picks", "Analysis Data Missing"),
+                "tasi_opportunities": parsed_content.get("tasi_opportunities", "Analysis Data Missing")
+            }
+        else:
+            logging.error(f"Raw AI Response (No JSON found): {content}")
+            raise ValueError("Could not extract JSON from AI response")
 
     except Exception as e:
         logging.error(f"AI Generation failed: {e}")
+        # Create a user-friendly error message
+        error_str = str(e)
+        if "401" in error_str:
+            ui_error = "AI Configuration Error: Invalid API Key (401)"
+        elif "429" in error_str:
+            ui_error = "AI Busy: Rate Limit Exceeded (429)"
+        elif "Expecting value" in error_str or "JSON" in error_str:
+            ui_error = "AI Error: Response Parsing Failed"
+        else:
+            ui_error = f"AI Analysis Failed: {error_str[:30]}..."
+
         return {
-            "stock_picks": "AI Analysis Failed",
-            "tasi_opportunities": "AI Analysis Failed"
+            "stock_picks": ui_error,
+            "tasi_opportunities": ui_error
         }
 
 
