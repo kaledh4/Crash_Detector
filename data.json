@@ -1,5 +1,5 @@
 {
-    "last_update": "2025-11-28 18:48:02 UTC",
+    "last_update": "2025-11-28 18:53:22 UTC",
     "target_date": "2026-11-28",
     "days_remaining": 364,
     "risk_assessment": {
@@ -10,13 +10,13 @@
     "metrics": [
         {
             "name": "USD/JPY Exchange Rate",
-            "value": "156.1570",
+            "value": "156.1420",
             "signal": "HIGH STRESS",
-            "volatility_24h": "0.04"
+            "volatility_24h": "0.02"
         },
         {
             "name": "USD/CNH (Offshore Yuan) Value",
-            "value": "7.0682",
+            "value": "7.0685",
             "signal": "NORMAL"
         },
         {
@@ -31,11 +31,7 @@
         }
     ],
     "ai_insights": {
-        "crash_analysis": {
-            "html": "<ul><li><strong>Current Stress Levels:</strong> USD/JPY at 156.1570 (HIGH STRESS) indicates potential currency instability, while MOVE Index Volatility Proxy at 45.00 (RISING STRESS) shows increasing bond market turbulence. 10-Year Treasury Yield remains stable at 4.09% (NORMAL).</li><li><strong>News Impact:</strong> 'Oil Prices Stable' and Big Tech rally headlines suggest short-term stability in key sectors, contradicting immediate crash signals despite FX stress.</li><li><strong>Critical Triggers:</strong> Watch for USD/JPY breaking above 158 (historic intervention zone) or MOVE Index surpassing 60 (2020 crash levels).</li><li><strong>Timeline Estimate:</strong> CLOSE (40-69% probability) - Elevated risk but no immediate catalyst. Potential 3-6 month window for stress accumulation if triggers are hit.</li></ul>"
-        },
-        "news_summary": {
-            "html": "<ul><li><strong>Oil Price Stability</strong> (Yahoo Finance): Neutral impact - Suggests no immediate commodity shock but masks underlying FX/rate risks.</li><li><strong>Big Tech Rally</strong> (MarketWatch): Mixed signal - While stock gains improve sentiment, concentration risk remains if rates rise unexpectedly.</li><li><strong>No Major Risk-Off Headlines:</strong> Absence of banking crisis or recession news temporarily lowers crash probability but doesn't eliminate structural risks.</li></ul>"
-        }
+        "crash_analysis": "<ul><li><strong>USD/JPY at 156.14 (HIGH STRESS)</strong> shows extreme currency stress, historically correlated with financial instability when above 150</li><li><strong>MOVE Index proxy at 45 (RISING STRESS)</strong> indicates growing bond market volatility, though still below panic levels (50+ is critical)</li><li><strong>Conflicting signals:</strong> Stable oil prices (“Oil Prices Stable” headline) and strong tech performance (“Meta/Microsoft weekly gains”) offset some stress, but don’t address structural USD/JPY risks</li><li><strong>Trigger watch:</strong> USD/JPY breaking 158 could force BOJ intervention, sparking liquidity crisis | <strong>Timeline:</strong> 3-6 months if yen weakness accelerates</li></ul><p><strong>Overall crash probability: CLOSE (55%)</strong> - Critical pressure points exist but not yet systemic.</p>",
+        "news_summary": "<ul><li><strong>1. \"Goldman: Profit/Dividend Growth to Drive Stocks in 2026\"</strong> - Contradicts crash fears with long-term bullish outlook, reducing immediate panic risk</li><li><strong>2. \"Oil Prices Stable”</strong> - Indicates no commodity shock currently amplifying market stress</li><li><strong>3. “Meta/Microsoft largest weekly gains since May”</strong> - Tech resilience may temporarily mask broader financial system stress (USD/JPY)</li></ul>"
     }
 }
