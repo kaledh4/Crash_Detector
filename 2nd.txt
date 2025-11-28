@@ -1,0 +1,138 @@
+I'll answer the three questions first, then suggest improvements to the project.
+
+## Answers to Follow-Up Questions
+
+### Q1: Additional Structural Economic Indicators
+
+Beyond MOVE, USD/JPY, and CNH, these indicators would provide a holistic view of U.S. Treasury funding stress:
+
+**Primary Indicators:**
+- **10-Year Treasury Yield Spread (10Y-2Y):** Tracks yield curve dynamics and funding stress expectations. *Free API: Alpha Vantage, FRED (Federal Reserve Economic Data)*
+- **TGA Balance (Treasury General Account):** Shows the Treasury's cash position at the Fed—critical for funding crunch detection. *Free API: FRED API*
+- **Foreign Holdings of U.S. Treasuries:** Monthly data from major holders (Japan, China) signals demand shifts. *Free API: Treasury International Capital (TIC) data via FRED*
+- **SOFR-OIS Spread:** Measures overnight funding stress in money markets. *Free API: FRED*
+- **Primary Dealer Net Positions:** Shows willingness of market makers to absorb Treasury supply. *API: Federal Reserve H.4.1 release (parseable)*
+
+**Secondary Indicators:**
+- **VIX Index:** General market stress proxy. *Free API: Alpha Vantage*
+- **Gold/Treasury Ratio:** Flight-to-safety metric showing preference shifts. *Free APIs: Alpha Vantage for both*
+- **Repo Market Rates (BGCR):** Stress in Treasury collateral markets. *Free API: FRED*
+
+### Q2: Adapting Signal Logic for Phase 1 → Phase 2 Transition
+
+The transition from **illiquidity shock** (Phase 1) to **inflation wave** (Phase 2) requires multi-regime detection:
+
+**Phase 1 Detection (Funding Shock/Illiquidity):**
+- Spike in MOVE Index (>100)
+- Sharp Treasury yield rise (>50bps in 1 week)
+- USD/JPY surge (>160) indicating carry trade unwind
+- Widening credit spreads
+- *Signal Logic:* HIGH correlation between volatility metrics
+
+**Phase 2 Detection (Inflation Wave/Real Assets):**
+- Commodity index surge (CRB Index, Gold, Oil)
+- TIPS breakeven inflation rates rising
+- Falling real yields despite nominal yield stability
+- CNH weakening (>7.5) as capital flows to hard assets
+- Bitcoin/crypto correlation with gold increases
+- *Signal Logic:* INVERSE correlation—volatility drops while commodity/real asset prices surge
+
+**Adaptive Logic:**
+```python
+def determine_regime_phase(metrics_history):
+    if (move_index > 100 and treasury_yield_change > 0.5):
+        return "PHASE_1_LIQUIDITY_SHOCK"
+    elif (move_index < 80 and commodities_3mo_return > 15 and tips_breakeven > 3.0):
+        return "PHASE_2_INFLATION_WAVE"
+    else:
+        return "PRE_SHOCK_MONITORING"
+```
+
+The key is tracking **velocity of change** and **cross-asset correlations** rather than absolute levels.
+
+### Q3: GitHub Actions vs. Serverless Functions Trade-offs
+
+**GitHub Actions (Current Approach):**
+
+*Advantages:*
+- Zero additional cost within GitHub free tier (2,000 minutes/month)
+- Integrated version control—every data update is git-tracked
+- Simple setup, no external accounts needed
+- Transparent logs accessible in repository
+- Works seamlessly with GitHub Pages deployment
+
+*Disadvantages:*
+- Fixed schedule (cron-based), not real-time
+- ~30-60 second cold start for runner provisioning
+- Limited to 6-hour max runtime per job
+- Cannot be triggered by external market events
+
+**Serverless Functions (AWS Lambda/Google Cloud):**
+
+*Advantages:*
+- Sub-second response times after warm-up
+- Can be triggered by real-time webhooks/market events
+- More flexible execution (event-driven)
+- Better for high-frequency updates (every minute)
+- Can scale to handle complex analytics
+
+*Disadvantages:*
+- Requires separate cloud account and API keys
+- Free tier limits (AWS: 1M requests/month, but API calls cost separately)
+- More complex security management (IAM roles, API Gateway)
+- Version control requires manual integration with Git
+- Cost can escalate quickly with frequent triggers
+- **Cold start latency** (3-5 seconds) for infrequently called functions
+
+**Recommendation:** For daily financial tracking with historical version control, **GitHub Actions is superior**. Serverless would only be justified if you need sub-minute updates triggered by real-time market conditions (e.g., when USD/JPY crosses 155 threshold).
+
+---
+
+## Recommended Improvements to the Project## Key Improvements Made:
+
+### 1. **Historical Tracking & Trend Analysis**
+- Added `historical_data.json` to store 30 days of data
+- Calculates 24-hour volatility for metrics (e.g., 2-yen JPY move = high volatility signal)
+- Enables detection of *acceleration* patterns, not just absolute levels
+
+### 2. **Composite Risk Score**
+- Weighted algorithm combining all metrics into single 0-100 risk score
+- Four risk levels: LOW (0-19), MODERATE (20-44), ELEVATED (45-69), CRITICAL (70+)
+- Makes it easy to see overall stress at a glance
+
+### 3. **Additional Metrics**
+- **10-Year Treasury Yield** added as direct funding stress indicator
+- Framework ready for VIX and other indicators
+
+### 4. **Enhanced Error Handling**
+- Retry logic for API calls (3 attempts with 2-second delays)
+- API rate limit detection
+- Better timeout handling (15 seconds)
+
+### 5. **Volatility-Adjusted Signals**
+- USD/JPY now triggers "HIGH STRESS + HIGH VOLATILITY" if moving >2 yen/day
+- Captures *velocity* of market moves, not just levels
+
+### Suggested Removals:
+
+1. **Remove OpenRouter references entirely** - The document correctly identifies that LLMs aren't suitable for structured financial data retrieval. No need to mention it at all.
+
+2. **Simplify MOVE Index proxy** - Instead of a random number, either:
+   - Use VIX as a correlation proxy (available via Alpha Vantage)
+   - Or remove it entirely and add a note that MOVE requires Bloomberg subscription
+
+3. **Add rate limit warning to documentation** - Alpha Vantage free tier: 25 API calls/day. With 3-4 metrics, you'll use 3-4 calls per run. Once daily is perfect, but users should know they can't test frequently.
+
+### Smart Additions:
+
+**For the frontend (`index.html`), add:**
+- **Risk score gauge/meter** showing composite risk visually
+- **7-day sparkline charts** showing metric trends (using historical data)
+- **Alert threshold indicators** (e.g., "USD/JPY is 5 yen away from HIGH STRESS")
+
+**For production readiness:**
+- Add GitHub Action to create **GitHub Issues automatically** when risk score exceeds ELEVATED
+- Email notifications via GitHub Actions (using `actions/send-mail`) when CRITICAL triggered
+- Export data to CSV weekly for external analysis
+
+Would you like me to create the enhanced frontend with the risk gauge and sparkline charts?

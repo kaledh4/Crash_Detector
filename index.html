@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Intelligence & Crash Detector</title>
+    <meta name="description" content="Daily market intelligence and financial stress tracking.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <meta name="theme-color" content="#1a1a1a">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+</head>
+
+<body>
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-content">
+            <div class="pulse-loader">
+                <div class="pulse-ring"></div>
+                <div class="pulse-core"></div>
+            </div>
+            <div class="loading-text">Initializing Market Data...</div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <h1>Crash Detector</h1>
+                        <div class="subtitle">Market Intelligence System</div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" id="install-btn" style="display: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" style="margin-right: 8px; vertical-align: middle;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Install App
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="last-updated">
+            <div class="status-indicator"></div>
+            <span id="last-updated">Loading...</span>
+            <span style="margin: 0 8px;">•</span>
+            <span>Days Remaining: <span id="days-remaining">--</span></span>
+        </div>
+
+        <main class="main-content">
+            <!-- Risk Assessment -->
+            <section class="digest-section">
+                <div class="stat-card" id="risk-card" style="border-left: 5px solid #28a745;">
+                    <div class="stat-icon markets">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Composite Risk Level</h3>
+                        <div class="stat-value" id="risk-level">Loading...</div>
+                        <div class="stat-label">Risk Score: <span id="risk-score">--</span>/100</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Metrics Grid -->
+            <div class="section-header">
+                <h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    Key Stress Indicators
+                </h2>
+            </div>
+            <div class="stats-grid" id="metrics-container">
+                <!-- Metrics will be injected here -->
+            </div>
+
+            <!-- AI Insights -->
+            <div class="section-header">
+                <h2>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Risk-Adjusted Market Analysis
+                </h2>
+                <span class="badge">AI Enhanced</span>
+            </div>
+
+            <div class="digest-content">
+                <h2>Global Stock Picks</h2>
+                <div id="stock-picks-content">
+                    <div class="loading-skeleton">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                    </div>
+                </div>
+
+                <h2>Saudi TASI Opportunities</h2>
+                <div id="tasi-content">
+                    <div class="loading-skeleton">
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line"></div>
+                        <div class="skeleton-line short"></div>
+                    </div>
+                </div>
+            </div>
+
+            <footer
+                style="margin-top: 4rem; text-align: center; color: var(--color-text-tertiary); font-size: 0.875rem;">
+                <p>For informational purposes only. See <a href="https://github.com/crash-detector/README.md"
+                        style="color: var(--color-accent-primary);">README</a> for full legal disclaimer.</p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Remove loading screen when loaded
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loading-screen');
+                loader.classList.add('hidden');
+                setTimeout(() => loader.remove(), 500);
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>
