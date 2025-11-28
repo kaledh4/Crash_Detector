@@ -436,5 +436,67 @@
       "news_summary": "<ul><li><b>Market Sentiment</b>: Big Tech rebound (Meta, Microsoft post largest weekly gains since May).</li><li><b>Risk Factors</b>: Layoffs surge globally, raising economic anxiety.</li><li><b>Asia-Specific</b>: Hong Kong insurers face $334M liabilities from Tai Po fire payouts.</li></ul>"
     },
     "days_remaining": 364
+  },
+  {
+    "last_update": "2025-11-28 19:20:15 UTC",
+    "risk_assessment": {
+      "score": 14.3,
+      "level": "LOW",
+      "color": "#28a745"
+    },
+    "convergence_score": {
+      "score": 0.0,
+      "status": "Low Convergence",
+      "details": ""
+    },
+    "metrics": [
+      {
+        "name": "10Y Treasury Auction Bid-to-Cover",
+        "value": "2.43x",
+        "signal": "NORMAL",
+        "desc": "Demand strength (Stress < 2.3x)"
+      },
+      {
+        "name": "30Y Auction Tail",
+        "value": "N/A",
+        "signal": "NORMAL",
+        "desc": "Dealer reluctance (Stress > 3bps)"
+      },
+      {
+        "name": "USD/JPY",
+        "value": "156.13",
+        "signal": "CRITICAL SHOCK",
+        "desc": "Carry-trade stress"
+      },
+      {
+        "name": "USD/CNH",
+        "value": "7.0680",
+        "signal": "NORMAL",
+        "desc": "Yuan stability"
+      },
+      {
+        "name": "China Credit Proxy (CBON)",
+        "value": "$22.58",
+        "signal": "NORMAL",
+        "desc": "VanEck China Bond ETF - Proxy for LGFV/Credit Stress"
+      },
+      {
+        "name": "10Y Treasury Yield",
+        "value": "4.02%",
+        "signal": "NORMAL",
+        "desc": "Systemic risk trigger"
+      },
+      {
+        "name": "MOVE Index",
+        "value": "71.90",
+        "signal": "NORMAL",
+        "desc": "Treasury volatility (Stress > 90)"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": "<ul><li><strong>Convergence Status:</strong> \ud83d\udd34 <span style='color: red;'>Low Convergence (Score: 0.0)</span> - Key metrics <u>do not</u> currently align for a crash scenario.</li><li><strong>US Treasury Funding Shock:</strong> Auction Bid-to-Cover (2.43x) is above stress threshold (2.3x), yields (4.02%) stable. No immediate Treasury funding stress.</li><li><strong>Japan Carry-Trade Unwind:</strong> \u26a0\ufe0f USD/JPY (156.13) signals <span style='color: red;'>CRITICAL SHOCK</span>, but lacks broader confirmation (yields, USD/CNH stable). Monitor for spillover.</li><li><strong>China Credit Crisis:</strong> Yuan (7.0680) and LGFV proxy (CBON $22.58) show <u>no stress</u>. Default risks contained for now.</li></ul>",
+      "news_summary": "<ul><li><strong>Tech Rally:</strong> Meta and Microsoft stocks post largest weekly gains since May, signaling potential Big Tech rebound.</li><li><strong>Labor Market Stress:</strong> Layoffs rising across industries, increasing worker anxiety.</li><li><strong>Insurance Fallout:</strong> Hong Kong insurers face $334M liability from deadly Tai Po fire.</li></ul>"
+    },
+    "days_remaining": 364
   }
 ]
