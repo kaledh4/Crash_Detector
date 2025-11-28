@@ -1,5 +1,5 @@
 {
-    "last_update": "2025-11-28 12:51:47 UTC",
+    "last_update": "2025-11-28 18:31:17 UTC",
     "target_date": "2026-11-28",
     "days_remaining": 364,
     "risk_assessment": {
@@ -10,13 +10,13 @@
     "metrics": [
         {
             "name": "USD/JPY Exchange Rate",
-            "value": "156.0950",
+            "value": "156.1190",
             "signal": "HIGH STRESS",
-            "volatility_24h": "0.03"
+            "volatility_24h": "0.02"
         },
         {
             "name": "USD/CNH (Offshore Yuan) Value",
-            "value": "7.0711",
+            "value": "7.0677",
             "signal": "NORMAL"
         },
         {
@@ -31,7 +31,7 @@
         }
     ],
     "ai_insights": {
-        "stock_picks": "<ul><li><strong>S&P 500 Volatility ETFs (e.g., VXXB)</strong><br/>With the MOVE Index showing rising stress (45.00) and JPY volatility signaling currency instability, hedges against equity market turbulence are prudent.</li><li><strong>US Defense Contractors (e.g., LMT, RTX)</strong><br/>Historically resilient during currency stress (USD/JPY HIGH STRESS at 156.0950) as governments prioritize defense spending.</li><li><strong>Gold Producers (e.g., NEM, GOLD)</strong><br/>A traditional safe haven when treasury yields (4.09%) and currency volatility create capital preservation concerns.</li><li><strong>Japanese Exporters (e.g., TM, HMC)</strong><br/>Benefit from a weaker JPY at 156.0950, though monitor for BOJ intervention risks.</li></ul>",
-        "tasi_opportunities": "<ul><li><strong>Saudi Basic Industries (SABIC)</strong><br/>Global manufacturing rebound plays could benefit from USD strength (high USD/JPY, USD/CNH) lowering input costs.</li><li><strong>Saudi Telecom (STC)</strong><br/>Defensive sector with stable cash flows amid rising global yield uncertainty (10Y at 4.09%).</li><li><strong>Aramco (2222.SR)</strong><br/>Oil price upside potential if USD strength (currency stress signals) pressures commodities, coupled with geopolitical risk premiums.</li><li><strong>Al Rajhi Bank</strong><br/>Sharia-compliant banks may attract capital from regions facing currency volatility (JPY, CNH).</li><li><strong>SAFCO Fertilizers</strong><br/>Agriculture-linked play as food security concerns resurface with currency-driven commodity swings.</li></ul>"
+        "crash_analysis": "<ul><li><strong>Status:</strong> CLOSE (40-69% probability)</li><li><strong>Key Indicators:</strong> USD/JPY exchange rate at 156.1190 signals HIGH STRESS, potentially indicating capital flight or loss of confidence in Japanese markets. MOVE Index proxy volatility at 45.00 shows RISING STRESS in fixed income markets, though 10-Year Treasury yields remain stable at 4.09%.</li><li><strong>Missing Data:</strong> No recent news complicates analysis, but historical patterns suggest currency stress (USD/JPY) and bond volatility (MOVE) often precede broader market corrections.</li><li><strong>Triggers to Watch:</strong> USD/JPY breaking above 160 (intervention threshold), MOVE Index surpassing 50 (extreme volatility), or sudden Treasury yield spike above 4.5%.</li><li><strong>Timeline:</strong> If triggers activate, high-risk window would be 2-6 months.</li></ul>",
+        "news_summary": "<ul><li><strong>No Recent News Available:</strong> Lack of data limits confirmation of stress signals from market metrics.</li><li><strong>Contextual Note:</strong> USD/JPY levels near 34-year highs (per prior trends) suggest underlying fragility not captured in current headlines.</li><li><strong>Monitoring Gap:</strong> Missing news on BOJ/Fed policy moves or Asian market instability leaves critical blind spots in analysis.</li></ul>"
     }
 }
