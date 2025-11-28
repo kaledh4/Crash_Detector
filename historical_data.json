@@ -146,5 +146,233 @@
       "crash_analysis": "<ul><li><strong>Status:</strong> CLOSE (40-69% probability)</li><li><strong>Key Indicators:</strong> USD/JPY exchange rate at 156.1190 signals HIGH STRESS, potentially indicating capital flight or loss of confidence in Japanese markets. MOVE Index proxy volatility at 45.00 shows RISING STRESS in fixed income markets, though 10-Year Treasury yields remain stable at 4.09%.</li><li><strong>Missing Data:</strong> No recent news complicates analysis, but historical patterns suggest currency stress (USD/JPY) and bond volatility (MOVE) often precede broader market corrections.</li><li><strong>Triggers to Watch:</strong> USD/JPY breaking above 160 (intervention threshold), MOVE Index surpassing 50 (extreme volatility), or sudden Treasury yield spike above 4.5%.</li><li><strong>Timeline:</strong> If triggers activate, high-risk window would be 2-6 months.</li></ul>",
       "news_summary": "<ul><li><strong>No Recent News Available:</strong> Lack of data limits confirmation of stress signals from market metrics.</li><li><strong>Contextual Note:</strong> USD/JPY levels near 34-year highs (per prior trends) suggest underlying fragility not captured in current headlines.</li><li><strong>Monitoring Gap:</strong> Missing news on BOJ/Fed policy moves or Asian market instability leaves critical blind spots in analysis.</li></ul>"
     }
+  },
+  {
+    "last_update": "2025-11-28 19:00:20 UTC",
+    "risk_assessment": {
+      "score": 16.7,
+      "level": "LOW",
+      "color": "#28a745"
+    },
+    "metrics": [
+      {
+        "name": "10Y Treasury Auction Bid-to-Cover",
+        "value": "N/A",
+        "signal": "DATA ERROR",
+        "desc": "Demand strength (Stress < 2.3x)"
+      },
+      {
+        "name": "30Y Auction Tail",
+        "value": "N/A",
+        "signal": "NORMAL",
+        "desc": "Dealer reluctance (Stress > 3bps)"
+      },
+      {
+        "name": "USD/JPY",
+        "value": "156.14",
+        "signal": "CRITICAL SHOCK",
+        "desc": "Carry-trade stress"
+      },
+      {
+        "name": "USD/CNH",
+        "value": "7.0686",
+        "signal": "NORMAL",
+        "desc": "Yuan stability"
+      },
+      {
+        "name": "China Credit Proxy (CBON)",
+        "value": "$22.58",
+        "signal": "NORMAL",
+        "desc": "LGFV/Bond stress proxy"
+      },
+      {
+        "name": "10Y Treasury Yield",
+        "value": "4.02%",
+        "signal": "NORMAL",
+        "desc": "Systemic risk trigger"
+      },
+      {
+        "name": "MOVE Index",
+        "value": "71.90",
+        "signal": "NORMAL",
+        "desc": "Treasury volatility"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": "<ul><li><span style='color: red; font-weight: bold;'>Convergence Status: PARTIAL (No crisis yet, but USD/JPY shock raises risk)</span></li><li><strong>US Treasury Funding Shock:</strong> No stress detected. Bid-to-Cover data is unavailable (ERROR), but 30Y Auction Tail and 10Y Yield (4.02%) remain normal.</li><li><strong>Japan Carry-Trade Unwind:</strong> <span style='color: red;'>CRITICAL SHOCK</span> in USD/JPY (156.14), signaling potential carry-trade distress.</li><li><strong>China Credit Crisis:</strong> No stress. USD/CNH (7.0686) and China Credit Proxy ($22.58) are stable.</li><li><strong>Non-Concurrent Stress:</strong> Only USD/JPY is signaling an extreme move. Without simultaneous stress in Treasuries and China, convergence is incomplete.</li></ul>",
+      "news_summary": "<ul><li><strong>Market Sentiment:</strong> Crypto (recovery predicted by Cathie Wood), Tech (Meta/Microsoft rally), and M&A (Puma surge) suggest risk-on tilt.</li><li><strong>No Macro Triggers:</strong> Oil stable, no news on China credit risks or Treasury stress.</li></ul>"
+    },
+    "days_remaining": 364
+  },
+  {
+    "last_update": "2025-11-28 19:01:00 UTC",
+    "risk_assessment": {
+      "score": 16.7,
+      "level": "LOW",
+      "color": "#28a745"
+    },
+    "metrics": [
+      {
+        "name": "10Y Treasury Auction Bid-to-Cover",
+        "value": "N/A",
+        "signal": "DATA ERROR",
+        "desc": "Demand strength (Stress < 2.3x)"
+      },
+      {
+        "name": "30Y Auction Tail",
+        "value": "N/A",
+        "signal": "NORMAL",
+        "desc": "Dealer reluctance (Stress > 3bps)"
+      },
+      {
+        "name": "USD/JPY",
+        "value": "156.14",
+        "signal": "CRITICAL SHOCK",
+        "desc": "Carry-trade stress"
+      },
+      {
+        "name": "USD/CNH",
+        "value": "7.0682",
+        "signal": "NORMAL",
+        "desc": "Yuan stability"
+      },
+      {
+        "name": "China Credit Proxy (CBON)",
+        "value": "$22.58",
+        "signal": "NORMAL",
+        "desc": "LGFV/Bond stress proxy"
+      },
+      {
+        "name": "10Y Treasury Yield",
+        "value": "4.02%",
+        "signal": "NORMAL",
+        "desc": "Systemic risk trigger"
+      },
+      {
+        "name": "MOVE Index",
+        "value": "71.90",
+        "signal": "NORMAL",
+        "desc": "Treasury volatility"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": "<ul><li><strong>Convergence Status: Partial Stress (No Full Convergence)</strong></li><li><strong>US Treasury Funding Shock:</strong> Insufficient data due to 'DATA ERROR' on the 10Y Auction Bid-to-Cover. However, the 30Y Auction Tail shows no dealer stress. The 10Y Treasury Yield (4.02%) and MOVE Index (71.90) remain in normal ranges, suggesting limited systemic risk.</li><li><strong>Japan Carry-Trade Unwind:</strong> USD/JPY (156.14) signals a <strong>CRITICAL SHOCK</strong>, indicating potential carry-trade stress and capital flight from JPY assets.</li><li><strong>China Credit Crisis:</strong> No signs of stress\u2014USD/CNH (7.0682) and China Credit Proxy (CBON) ($22.58) are both normal, reflecting yuan stability and no imminent LGFV defaults.</li><li><strong>Conclusion:</strong> Only USD/JPY shows critical stress. Without simultaneous stress in US Treasuries and China credit, full convergence is unlikely.</li></ul>",
+      "news_summary": "<ul><li><strong>Market Sentiment:</strong> Positive tech momentum (Meta, Microsoft stocks surge).</li><li><strong>Corporate News:</strong> Puma shares rise on takeover speculation; Goldman Sachs forecasts stock growth driven by profits/dividends (2026 outlook).</li><li><strong>Commodities:</strong> Oil prices stable amid unchanged fundamentals.</li><li><strong>Non-Market Impact:</strong> No relevant news linked to the Global Financial Fault Lines theory.</li></ul>"
+    },
+    "days_remaining": 364
+  },
+  {
+    "last_update": "2025-11-28 19:03:03 UTC",
+    "risk_assessment": {
+      "score": 16.7,
+      "level": "LOW",
+      "color": "#28a745"
+    },
+    "metrics": [
+      {
+        "name": "10Y Treasury Auction Bid-to-Cover",
+        "value": "N/A",
+        "signal": "DATA ERROR",
+        "desc": "Demand strength (Stress < 2.3x)"
+      },
+      {
+        "name": "30Y Auction Tail",
+        "value": "N/A",
+        "signal": "NORMAL",
+        "desc": "Dealer reluctance (Stress > 3bps)"
+      },
+      {
+        "name": "USD/JPY",
+        "value": "156.13",
+        "signal": "CRITICAL SHOCK",
+        "desc": "Carry-trade stress"
+      },
+      {
+        "name": "USD/CNH",
+        "value": "7.0681",
+        "signal": "NORMAL",
+        "desc": "Yuan stability"
+      },
+      {
+        "name": "China Credit Proxy (CBON)",
+        "value": "$22.58",
+        "signal": "NORMAL",
+        "desc": "LGFV/Bond stress proxy"
+      },
+      {
+        "name": "10Y Treasury Yield",
+        "value": "4.02%",
+        "signal": "NORMAL",
+        "desc": "Systemic risk trigger"
+      },
+      {
+        "name": "MOVE Index",
+        "value": "71.90",
+        "signal": "NORMAL",
+        "desc": "Treasury volatility"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": "<ul><li><strong>Convergence Status:</strong> <span style='color: red;'>PARTIAL - 1/3 Critical Triggers Active</span> (Only USD/JPY at CRITICAL SHOCK signal. US Treasury funding and China stress remain NORMAL)</li><li><strong>US Treasury Stress:</strong> 10Y Auction Bid-to-Cover shows DATA ERROR (indeterminate risk), but other metrics (30Y Auction Tail, 10Y Yield, MOVE Index) suggest no systemic pressure.</li><li><strong>Japan Carry-Trade Unwind:</strong> USD/JPY at 156.13 (CRITICAL SHOCK) signals severe stress in JPY-funded carry trades \u2013 key RISK FLAG.</li><li><strong>China Credit Crisis:</strong> No immediate signs (USD/CNH stable, CBON proxy normal). Yuan devaluation/LGFV defaults not yet triggering.</li></ul>",
+      "news_summary": "<ul><li>Market sentiment mixed: <strong>Meta and Microsoft stocks rally</strong> (Big Tech resurgence), while <strong>Puma surges on takeover speculation</strong>.</li><li>No direct news links to Treasury stress or China credit events. Energy markets (<strong>oil prices stable</strong>) show no contagion signals.</li><li>Non-market risk note: Inheritance planning questions (<em>laundromat assets/spousal exclusion</em>) highlight private wealth concerns.</li></ul>"
+    },
+    "days_remaining": 364
+  },
+  {
+    "last_update": "2025-11-28 19:03:59 UTC",
+    "risk_assessment": {
+      "score": 14.3,
+      "level": "LOW",
+      "color": "#28a745"
+    },
+    "metrics": [
+      {
+        "name": "10Y Treasury Auction Bid-to-Cover",
+        "value": "2.43x",
+        "signal": "NORMAL",
+        "desc": "Demand strength (Stress < 2.3x)"
+      },
+      {
+        "name": "30Y Auction Tail",
+        "value": "N/A",
+        "signal": "NORMAL",
+        "desc": "Dealer reluctance (Stress > 3bps)"
+      },
+      {
+        "name": "USD/JPY",
+        "value": "156.13",
+        "signal": "CRITICAL SHOCK",
+        "desc": "Carry-trade stress"
+      },
+      {
+        "name": "USD/CNH",
+        "value": "7.0686",
+        "signal": "NORMAL",
+        "desc": "Yuan stability"
+      },
+      {
+        "name": "China Credit Proxy (CBON)",
+        "value": "$22.58",
+        "signal": "NORMAL",
+        "desc": "LGFV/Bond stress proxy"
+      },
+      {
+        "name": "10Y Treasury Yield",
+        "value": "4.02%",
+        "signal": "NORMAL",
+        "desc": "Systemic risk trigger"
+      },
+      {
+        "name": "MOVE Index",
+        "value": "71.90",
+        "signal": "NORMAL",
+        "desc": "Treasury volatility"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": "<ul><li><strong>Convergence Status:</strong> Partial Stress Detected (Not Full Convergence)</li><li><strong>US Treasury Shock:</strong> Normal (Bid-to-Cover: 2.43x > 2.3x, 30Y Tail N/A)</li><li><strong>Japan Carry-Trade Unwind:</strong> Critical Shock (USD/JPY: 156.13 - Extreme FX Volatility)</li><li><strong>China Credit Crisis:</strong> Normal (USD/CNH Stable at 7.0686, CBON Proxy at $22.58)</li><li><strong>Missing Triggers:</strong> Stable Treasury Yields (4.02%) and China Credit Metrics</li></ul>",
+      "news_summary": "<ul><li>Market Sentiment: Mixed (Big Tech Gains vs. USD/JPY Stress)</li><li>Notable Movers: Puma (Takeover Speculation), Meta/Microsoft (Tech Rally)</li><li>Oil and Nuclear Stock Headlines Suggest Sector-Specific Volatility</li><li>No Direct News Links to Treasury, China Credit, or JPY Crisis</li></ul>"
+    },
+    "days_remaining": 364
   }
 ]

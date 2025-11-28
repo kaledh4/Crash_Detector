@@ -89,6 +89,7 @@ function renderDashboard(data) {
                 <span class="dot" style="background-color: ${statusColor}"></span>
                 ${metric.signal}
             </div>
+            ${metric.desc ? `<div class="desc" style="font-size: 0.8em; opacity: 0.8; margin-top: 5px;">${metric.desc}</div>` : ''}
             ${metric.volatility_24h ? `<div class="volatility">24h Volatility: ${metric.volatility_24h}</div>` : ''}
         `;
         metricsContainer.appendChild(card);

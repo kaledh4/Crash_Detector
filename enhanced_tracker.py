@@ -3,471 +3,347 @@ import json
 import requests
 from datetime import datetime, timezone, timedelta
 import logging
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Tuple
+import yfinance as yf
 
 # --- Configuration ---
-API_KEY = os.environ.get('FINANCIAL_API_KEY')
 DATA_FILE = 'data.json'
-HISTORY_FILE = 'historical_data.json'  # NEW: Track trends over time
+HISTORY_FILE = 'historical_data.json'
 OPENROUTER_API_KEY = os.environ.get('OPENROUTER_API_KEY')
 
 # Stress thresholds
-JPY_STRESS_THRESHOLD = 155.0
-JPY_CRITICAL_THRESHOLD = 160.0
-CNH_STRESS_THRESHOLD = 7.3
-CNH_CRITICAL_THRESHOLD = 7.5
-MOVE_PROXY_HIGH = 60.0
-MOVE_PROXY_CRITICAL = 80.0
+JPY_STRESS_THRESHOLD = 150.0
+JPY_CRITICAL_THRESHOLD = 155.0
+CNH_STRESS_THRESHOLD = 7.25
+CNH_CRITICAL_THRESHOLD = 7.4
+MOVE_PROXY_HIGH = 120.0  # Adjusted for actual MOVE index levels if available, or VIX proxy
+MOVE_PROXY_CRITICAL = 140.0
 
-# NEW: Volatility detection
-JPY_VOLATILITY_THRESHOLD = 2.0  # 2 yen move in 24h = high volatility
+# Auction Thresholds
+AUCTION_BTC_STRESS = 2.3  # Bid-to-Cover Ratio
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# --- Enhanced Utility Functions ---
+# --- Data Fetching Functions ---
 
-def fetch_treasury_yield_10y() -> Optional[float]:
+def fetch_treasury_auction_data(term: str, security_type: str) -> Optional[Dict]:
     """
-    Fetch 10-Year Treasury Yield from Alpha Vantage.
-    Symbol: ^TNX or use FRED API integration
+    Fetch latest Treasury Auction data from FiscalData API.
     """
-    logging.info("Fetching 10-Year Treasury Yield...")
-    # Using Alpha Vantage's TIME_SERIES_DAILY for treasury yield tracking
-    # Note: For production, FRED API is more reliable for yields
-    URL = f"https://www.alphavantage.co/query?function=FEDERAL_FUNDS_RATE&apikey={API_KEY}"
+    logging.info(f"Fetching {term} Treasury Auction data...")
+    base_url = "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/od/auctions_query"
+    
+    # Filter for specific term and type, sort by date desc
+    params = {
+        "filter": f"security_term:eq:{term},security_type:eq:{security_type}",
+        "sort": "-auction_date",
+        "page[size]": 1
+    }
     
     try:
-        response = requests.get(URL, timeout=10)
+        response = requests.get(base_url, params=params, timeout=10)
         response.raise_for_status()
         data = response.json()
         
         if 'data' in data and len(data['data']) > 0:
-            # Get most recent rate
-            latest = data['data'][0]
-            rate = float(latest['value'])
-            logging.info(f"Federal Funds Rate: {rate}%")
-            return rate
+            return data['data'][0]
         return None
     except Exception as e:
-        logging.error(f"Treasury yield fetch failed: {e}")
+        logging.error(f"Treasury Auction fetch failed for {term}: {e}")
         return None
 
-
-def fetch_vix_index() -> Optional[float]:
-    """Fetch VIX (market volatility index) as additional stress indicator."""
-    logging.info("Fetching VIX Index...")
-    # Alpha Vantage doesn't directly support VIX in free tier
-    # Using a placeholder - in production, use a dedicated market data API
-    return None
-
-
-def fetch_fx_rate(symbol: str) -> Optional[float]:
-    """
-    Fetches the latest FX rate using Alpha Vantage.
-    Enhanced with retry logic and better error handling.
-    """
-    logging.info(f"Fetching FX rate for {symbol}...")
-    URL = f"https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency={symbol[:3]}&to_currency={symbol[3:]}&apikey={API_KEY}"
-    
-    max_retries = 3
-    for attempt in range(max_retries):
-        try:
-            response = requests.get(URL, timeout=15)
-            response.raise_for_status()
-            data = response.json()
-            
-            # Check for API rate limit message
-            if 'Note' in data:
-                logging.warning(f"API rate limit reached: {data['Note']}")
-                return None
-            
-            if 'Error Message' in data:
-                logging.error(f"Alpha Vantage Error for {symbol}: {data.get('Error Message')}")
-                return None
-            
-            rate_key = '5. Exchange Rate'
-            if 'Realtime Currency Exchange Rate' in data and rate_key in data['Realtime Currency Exchange Rate']:
-                rate = float(data['Realtime Currency Exchange Rate'][rate_key])
-                logging.info(f"{symbol} Rate: {rate}")
-                return rate
-            else:
-                logging.error(f"FX data key not found in response for {symbol}.")
-                return None
+def fetch_market_data_yf(ticker: str) -> Optional[float]:
+    """Fetch current price/rate using yfinance."""
+    logging.info(f"Fetching {ticker} via yfinance...")
+    try:
+        ticker_obj = yf.Ticker(ticker)
+        # Try to get fast info first
+        price = None
         
-        except requests.exceptions.RequestException as e:
-            logging.error(f"Request failed for {symbol} (attempt {attempt+1}/{max_retries}): {e}")
-            if attempt < max_retries - 1:
-                import time
-                time.sleep(2)  # Wait before retry
-    
-    return None
+        # Method 1: fast_info (often works for currencies/indices)
+        try:
+            price = ticker_obj.fast_info.last_price
+        except:
+            pass
+            
+        # Method 2: history (fallback)
+        if price is None:
+            hist = ticker_obj.history(period="1d")
+            if not hist.empty:
+                price = hist['Close'].iloc[-1]
+                
+        if price is not None:
+            logging.info(f"{ticker}: {price}")
+            return float(price)
+        
+        logging.warning(f"No data found for {ticker}")
+        return None
+    except Exception as e:
+        logging.error(f"yfinance failed for {ticker}: {e}")
+        return None
 
+def fetch_financial_news() -> List[Dict]:
+    """Fetch latest financial news from free RSS feeds."""
+    logging.info("Fetching financial news from RSS feeds...")
+    rss_feeds = [
+        "https://finance.yahoo.com/news/rssindex",
+        "https://www.reuters.com/business/finance/rss",
+        "https://www.marketwatch.com/rss/topstories",
+    ]
+    
+    all_articles = []
+    try:
+        import feedparser
+        for feed_url in rss_feeds:
+            try:
+                feed = feedparser.parse(feed_url)
+                for entry in feed.entries[:3]:
+                    all_articles.append({
+                        "title": entry.get('title', 'No title'),
+                        "source": feed.feed.get('title', 'Unknown'),
+                        "publishedAt": entry.get('published', 'Unknown date')
+                    })
+            except Exception:
+                continue
+        return all_articles[:5]
+    except ImportError:
+        return []
+    except Exception as e:
+        logging.error(f"RSS fetch failed: {e}")
+        return []
+
+# --- Analysis Functions ---
 
 def load_historical_data() -> List[Dict]:
-    """Load historical data for trend analysis."""
     try:
         if os.path.exists(HISTORY_FILE):
             with open(HISTORY_FILE, 'r') as f:
                 return json.load(f)
         return []
-    except Exception as e:
-        logging.error(f"Failed to load historical data: {e}")
+    except Exception:
         return []
 
-
 def save_historical_data(history: List[Dict]):
-    """Save historical data (keep last 30 days)."""
     try:
-        # Keep only last 30 entries
         history = history[-30:]
         with open(HISTORY_FILE, 'w') as f:
             json.dump(history, f, indent=2)
-        logging.info("Historical data saved")
     except Exception as e:
-        logging.error(f"Failed to save historical data: {e}")
+        logging.error(f"Failed to save history: {e}")
 
-
-def calculate_volatility(current_value: float, history: List[Dict], metric_name: str) -> Optional[float]:
-    """Calculate 24h volatility for a given metric."""
-    if not history or current_value is None:
-        return None
-    
-    # Find yesterday's value
-    yesterday = None
-    for entry in reversed(history):
-        for metric in entry.get('metrics', []):
-            if metric['name'] == metric_name and metric['value'] != "DATA ERROR":
-                try:
-                    yesterday = float(metric['value'])
-                    break
-                except (ValueError, TypeError):
-                    continue
-        if yesterday:
-            break
-    
-    if yesterday:
-        return abs(current_value - yesterday)
-    return None
-
-
-def determine_signal(metric_name: str, value: Optional[float], volatility: Optional[float] = None) -> str:
-    """Enhanced signal determination with volatility consideration."""
+def determine_signal(metric_name: str, value: float, extra_data: Dict = None) -> str:
+    """Determine stress signal based on thresholds."""
     if value is None:
         return "DATA ERROR"
     
-    if metric_name == "USD/JPY Exchange Rate":
-        # Factor in volatility
-        if volatility and volatility >= JPY_VOLATILITY_THRESHOLD:
-            if value >= JPY_CRITICAL_THRESHOLD:
-                return "CRITICAL SHOCK"
-            elif value >= JPY_STRESS_THRESHOLD:
-                return "HIGH STRESS + HIGH VOLATILITY"
+    # 1. USD/JPY
+    if metric_name == "USD/JPY":
+        if value >= JPY_CRITICAL_THRESHOLD: return "CRITICAL SHOCK"
+        if value >= JPY_STRESS_THRESHOLD: return "HIGH STRESS"
+        if value > 145.0: return "RISING STRESS"
         
-        if value >= JPY_CRITICAL_THRESHOLD:
-            return "CRITICAL SHOCK"
-        elif value >= JPY_STRESS_THRESHOLD:
-            return "HIGH STRESS"
-        elif value > 145.0:
-            return "RISING STRESS"
-    
-    elif metric_name == "USD/CNH (Offshore Yuan) Value":
-        if value >= CNH_CRITICAL_THRESHOLD:
-            return "CRITICAL SHOCK"
-        elif value >= CNH_STRESS_THRESHOLD:
-            return "HIGH STRESS"
-        elif value > 7.15:
-            return "RISING STRESS"
-    
-    elif metric_name == "MOVE Index Volatility (Proxy)":
-        if value >= MOVE_PROXY_CRITICAL:
-            return "CRITICAL SHOCK"
-        elif value >= MOVE_PROXY_HIGH:
-            return "HIGH STRESS"
-        elif value > 40.0:
-            return "RISING STRESS"
-    
-    elif metric_name == "10-Year Treasury Yield":
-        if value >= 5.5:
-            return "CRITICAL SHOCK"
-        elif value >= 5.0:
-            return "HIGH STRESS"
-        elif value >= 4.5:
-            return "RISING STRESS"
-    
+    # 2. USD/CNH
+    elif metric_name == "USD/CNH":
+        if value >= CNH_CRITICAL_THRESHOLD: return "CRITICAL SHOCK"
+        if value >= CNH_STRESS_THRESHOLD: return "HIGH STRESS"
+        if value > 7.15: return "RISING STRESS"
+        
+    # 3. 10-Year Yield
+    elif metric_name == "10Y Treasury Yield":
+        if value >= 5.0: return "CRITICAL SHOCK"
+        if value >= 4.5: return "HIGH STRESS"
+        if value >= 4.2: return "RISING STRESS"
+        
+    # 4. MOVE Index (Volatility)
+    elif metric_name == "MOVE Index":
+        if value >= MOVE_PROXY_CRITICAL: return "CRITICAL SHOCK"
+        if value >= MOVE_PROXY_HIGH: return "HIGH STRESS"
+        if value > 100.0: return "RISING STRESS"
+
+    # 5. Auction Bid-to-Cover
+    elif metric_name == "10Y Auction Bid-to-Cover":
+        if value < 2.0: return "CRITICAL SHOCK"
+        if value < AUCTION_BTC_STRESS: return "HIGH STRESS" # < 2.3
+        if value < 2.4: return "RISING STRESS"
+        
+    # 6. China Credit Proxy (CBON ETF) - Lower is worse (outflows/yields up)
+    elif metric_name == "China Credit Proxy (CBON)":
+        # Assuming baseline ~21.0-22.0. Drop indicates stress.
+        if value < 20.0: return "HIGH STRESS"
+        
     return "NORMAL"
 
-
-def calculate_composite_risk_score(metrics: List[Dict]) -> Dict:
-    """NEW: Calculate overall risk score from all metrics."""
+def calculate_composite_risk(metrics: List[Dict]) -> Dict:
     score = 0
-    weights = {
-        "CRITICAL SHOCK": 100,
-        "HIGH STRESS + HIGH VOLATILITY": 80,
-        "HIGH STRESS": 60,
-        "RISING STRESS": 30,
-        "NORMAL": 0,
-        "DATA ERROR": 0
-    }
+    count = 0
+    weights = {"CRITICAL SHOCK": 100, "HIGH STRESS": 75, "RISING STRESS": 40, "NORMAL": 0}
     
-    total_weight = 0
-    for metric in metrics:
-        signal = metric.get('signal', 'NORMAL')
-        score += weights.get(signal, 0)
-        total_weight += 1 if signal != "DATA ERROR" else 0
+    for m in metrics:
+        if m['signal'] in weights:
+            score += weights[m['signal']]
+            count += 1
+            
+    if count == 0: return {"score": 0, "level": "UNKNOWN", "color": "#6c757d"}
     
-    if total_weight == 0:
-        return {"score": 0, "level": "UNKNOWN", "color": "#6c757d"}
-    
-    avg_score = score / total_weight
-    
-    if avg_score >= 70:
-        return {"score": round(avg_score, 1), "level": "CRITICAL", "color": "#dc3545"}
-    elif avg_score >= 45:
-        return {"score": round(avg_score, 1), "level": "ELEVATED", "color": "#ffc107"}
-    elif avg_score >= 20:
-        return {"score": round(avg_score, 1), "level": "MODERATE", "color": "#fd7e14"}
-    else:
-        return {"score": round(avg_score, 1), "level": "LOW", "color": "#28a745"}
-
-
-def fetch_financial_news() -> List[Dict]:
-    """Fetch latest financial news from free RSS feeds (no API key needed)."""
-    logging.info("Fetching financial news from RSS feeds...")
-    
-    # Free RSS feeds from major financial news sources
-    rss_feeds = [
-        "https://finance.yahoo.com/news/rssindex",  # Yahoo Finance
-        "https://www.reuters.com/business/finance/rss",  # Reuters Finance
-        "https://www.marketwatch.com/rss/topstories",  # MarketWatch
-    ]
-    
-    all_articles = []
-    
-    try:
-        import feedparser
-        
-        for feed_url in rss_feeds:
-            try:
-                feed = feedparser.parse(feed_url)
-                
-                for entry in feed.entries[:3]:  # Top 3 from each source
-                    # Filter for crash/crisis related news
-                    title = entry.get('title', '').lower()
-                    summary = entry.get('summary', entry.get('description', '')).lower()
-                    
-                    # Check if news is relevant to market crashes/crises
-                    keywords = ['crash', 'crisis', 'recession', 'volatility', 'market', 
-                               'stock', 'fed', 'interest rate', 'inflation', 'sell-off',
-                               'correction', 'bear market', 'treasury', 'yield']
-                    
-                    if any(keyword in title or keyword in summary for keyword in keywords):
-                        all_articles.append({
-                            "title": entry.get('title', 'No title'),
-                            "description": entry.get('summary', entry.get('description', 'No description'))[:200],
-                            "source": feed.feed.get('title', 'Unknown'),
-                            "publishedAt": entry.get('published', 'Unknown date')
-                        })
-                
-            except Exception as e:
-                logging.warning(f"Failed to fetch from {feed_url}: {e}")
-                continue
-        
-        # Return top 5 most recent relevant articles
-        return all_articles[:5]
-        
-    except ImportError:
-        logging.error("feedparser library not installed. Install with: pip install feedparser")
-        return []
-    except Exception as e:
-        logging.error(f"RSS feed fetch failed: {e}")
-        return []
-
+    avg = score / count
+    if avg >= 60: return {"score": round(avg, 1), "level": "CRITICAL", "color": "#dc3545"}
+    if avg >= 35: return {"score": round(avg, 1), "level": "ELEVATED", "color": "#ffc107"}
+    return {"score": round(avg, 1), "level": "LOW", "color": "#28a745"}
 
 def generate_ai_insights(metrics: List[Dict]) -> Dict:
-    """Generate crash probability analysis based on metrics and real news."""
     if not OPENROUTER_API_KEY:
-        logging.warning("OPENROUTER_API_KEY not found. Skipping AI insights.")
-        return {
-            "crash_analysis": "AI Analysis Unavailable (Missing API Key)",
-            "news_summary": "News Unavailable (Missing API Key)"
-        }
-
-    logging.info("Fetching financial news and generating crash analysis...")
+        return {"crash_analysis": "AI Key Missing", "news_summary": "AI Key Missing"}
+        
+    news = fetch_financial_news()
+    news_text = "\n".join([f"- {n['title']}" for n in news])
     
-    # Fetch real news
-    news_articles = fetch_financial_news()
-    news_context = "\n".join([
-        f"- {article['title']} ({article['source']})"
-        for article in news_articles
-    ]) if news_articles else "No recent news available"
-    
-    headers = {
-        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://github.com/crash-detector", 
-        "X-Title": "Crash Detector"
-    }
-
     metrics_str = json.dumps(metrics, indent=2)
-    prompt = f"""
-    You are a financial crash prediction AI analyzing real-time market data and news.
     
-    **CURRENT MARKET METRICS:**
+    prompt = f"""
+    Analyze these market metrics for a "Global Financial Fault Lines" convergence event.
+    
+    **THEORY:**
+    A crash is triggered by the simultaneous convergence of:
+    1. **US Treasury Funding Shock** (Weak Auctions, Rising Yields)
+    2. **Japan Carry-Trade Unwind** (USD/JPY Crash/Spike)
+    3. **China Credit Crisis** (LGFV Defaults, Yuan Devaluation)
+    
+    **METRICS:**
     {metrics_str}
     
-    **LATEST FINANCIAL NEWS (Real headlines from today):**
-    {news_context}
-
-    Based on these REAL metrics and news, provide a crash probability analysis:
-
-    1. **"crash_analysis"**: Analyze the likelihood of a market crash in the next 12 months. Categorize as:
-       - **MOST LIKELY TRUE** (70-100% probability): Clear signs of imminent crash
-       - **CLOSE** (40-69% probability): Significant warning signs, elevated risk
-       - **FAR** (0-39% probability): Low risk, stable conditions
-       
-       Provide 3-4 bullet points explaining:
-       - Current stress levels from the metrics (USD/JPY, yields, volatility)
-       - How recent news headlines support or contradict crash signals
-       - Specific trigger points to watch
-       - Timeline estimate if crash seems likely
-
-    2. **"news_summary"**: Summarize the top 3 most relevant news items and their impact on crash probability.
-
-    **CRITICAL RULES:**
-    - Use ONLY the provided metrics and news headlines
-    - Be specific about numbers (e.g., "USD/JPY at 156.09 indicates...")
-    - Reference actual news headlines
-    - Give honest probability assessment
-    - Keep it concise and actionable
-
-    Format as JSON with keys "crash_analysis" and "news_summary", containing HTML strings (use <ul><li> for lists).
+    **NEWS:**
+    {news_text}
+    
+    **TASK:**
+    1. Check for **SIMULTANEOUS MOVEMENT**: Are Yields, USD/JPY, and USD/CNH all moving in stress directions?
+    2. Analyze the **10Y Auction Bid-to-Cover**: Is demand failing (< 2.3x)?
+    3. Analyze **China Credit**: Is the LGFV proxy showing stress?
+    
+    Return JSON:
+    {{
+        "crash_analysis": "HTML string (<ul><li>) with analysis. Highlight the 'Convergence Status'.",
+        "news_summary": "HTML string summarizing key news."
+    }}
     """
-
-    data = {
-        "model": "tngtech/tng-r1t-chimera:free",
-        "messages": [
-            {"role": "system", "content": "You are a financial crash prediction AI. Analyze real data and news to predict market crash probability."},
-            {"role": "user", "content": prompt}
-        ],
-        "response_format": {"type": "json_object"}
-    }
-
+    
     try:
-        response = requests.post(
+        resp = requests.post(
             "https://openrouter.ai/api/v1/chat/completions",
-            headers=headers,
-            json=data,
+            headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}"},
+            json={
+                "model": "tngtech/tng-r1t-chimera:free",
+                "messages": [{"role": "user", "content": prompt}],
+                "response_format": {"type": "json_object"}
+            },
             timeout=30
         )
-        response.raise_for_status()
-        result = response.json()
-        
-        content = result['choices'][0]['message']['content']
-        
-        # Enhanced JSON parsing
-        import re
-        json_match = re.search(r'\{.*\}', content, re.DOTALL)
-        
-        if json_match:
-            json_str = json_match.group(0)
-            parsed_content = json.loads(json_str)
-            return {
-                "crash_analysis": parsed_content.get("crash_analysis", "Analysis Data Missing"),
-                "news_summary": parsed_content.get("news_summary", "News Summary Missing")
-            }
-        else:
-            logging.error(f"Raw AI Response (No JSON found): {content}")
-            raise ValueError("Could not extract JSON from AI response")
-
+        content = resp.json()['choices'][0]['message']['content']
+        # Simple JSON extraction
+        start = content.find('{')
+        end = content.rfind('}') + 1
+        return json.loads(content[start:end])
     except Exception as e:
-        logging.error(f"AI Generation failed: {e}")
-        error_str = str(e)
-        if "401" in error_str:
-            ui_error = "AI Configuration Error: Invalid API Key (401)"
-        elif "429" in error_str:
-            ui_error = "AI Busy: Rate Limit Exceeded (429)"
-        elif "Expecting value" in error_str or "JSON" in error_str:
-            ui_error = "AI Error: Response Parsing Failed"
-        else:
-            ui_error = f"AI Analysis Failed: {error_str[:30]}..."
-
-        return {
-            "crash_analysis": ui_error,
-            "news_summary": ui_error
-        }
-
+        logging.error(f"AI Error: {e}")
+        return {"crash_analysis": "AI Analysis Failed", "news_summary": "Check Logs"}
 
 def update_tracing_data():
-    """Main function with enhanced analytics."""
-    if not API_KEY:
-        logging.error("FINANCIAL_API_KEY not found in environment variables.")
-        return
+    # 1. Fetch Data
+    # Yahoo Finance Tickers
+    usd_jpy = fetch_market_data_yf("JPY=X")
+    usd_cnh = fetch_market_data_yf("CNH=X")
+    yield_10y = fetch_market_data_yf("^TNX")  # CBOE 10 Year Treasury Yield
+    move_index = fetch_market_data_yf("^MOVE") # ICE BofA MOVE Index (might not be free on Yahoo, fallback to VIX if needed)
+    if not move_index:
+        move_index = fetch_market_data_yf("^VIX") # Fallback proxy
+        move_name = "VIX (Volatility Proxy)"
+    else:
+        move_name = "MOVE Index"
+        
+    cbon_etf = fetch_market_data_yf("CBON") # China Bond ETF (LGFV Proxy)
     
-    # Load historical data
-    history = load_historical_data()
+    # Treasury Auction Data
+    auction_10y = fetch_treasury_auction_data("10-Year", "Note")
+    auction_30y = fetch_treasury_auction_data("30-Year", "Bond")
     
-    # Fetch current data
-    move_proxy = 45.0  # Placeholder - replace with actual API
-    usd_jpy = fetch_fx_rate('USDJPY')
-    usd_cnh = fetch_fx_rate('USDCNH')
-    treasury_10y = fetch_treasury_yield_10y()
+    # Process Auction Metrics
+    btc_10y = float(auction_10y['bid_to_cover_ratio']) if auction_10y else None
     
-    # Calculate volatilities
-    jpy_volatility = calculate_volatility(usd_jpy, history, "USD/JPY Exchange Rate") if usd_jpy else None
-    
-    # Build enhanced metrics array
-    new_metrics = [
+    # Calculate 30Y Tail (High Yield - Average Yield) if available
+    tail_30y = None
+    if auction_30y and 'high_yield' in auction_30y and 'average_median_yield' in auction_30y:
+        try:
+            high = float(auction_30y['high_yield'])
+            avg = float(auction_30y['average_median_yield'])
+            tail_30y = (high - avg) * 100 # Basis points
+        except:
+            pass
+
+    # 2. Build Metrics List
+    metrics = [
         {
-            "name": "USD/JPY Exchange Rate",
-            "value": f"{usd_jpy:.4f}" if usd_jpy else "DATA ERROR",
-            "signal": determine_signal("USD/JPY Exchange Rate", usd_jpy, jpy_volatility),
-            "volatility_24h": f"{jpy_volatility:.2f}" if jpy_volatility else "N/A"
+            "name": "10Y Treasury Auction Bid-to-Cover",
+            "value": f"{btc_10y:.2f}x" if btc_10y else "N/A",
+            "signal": determine_signal("10Y Auction Bid-to-Cover", btc_10y),
+            "desc": "Demand strength (Stress < 2.3x)"
         },
         {
-            "name": "USD/CNH (Offshore Yuan) Value",
-            "value": f"{usd_cnh:.4f}" if usd_cnh else "DATA ERROR",
-            "signal": determine_signal("USD/CNH (Offshore Yuan) Value", usd_cnh)
+            "name": "30Y Auction Tail",
+            "value": f"{tail_30y:.1f} bps" if tail_30y is not None else "N/A",
+            "signal": "NORMAL" if (tail_30y is None or tail_30y < 3.0) else "HIGH STRESS",
+            "desc": "Dealer reluctance (Stress > 3bps)"
         },
         {
-            "name": "MOVE Index Volatility (Proxy)",
-            "value": f"{move_proxy:.2f}" if move_proxy else "DATA ERROR",
-            "signal": determine_signal("MOVE Index Volatility (Proxy)", move_proxy)
+            "name": "USD/JPY",
+            "value": f"{usd_jpy:.2f}" if usd_jpy else "N/A",
+            "signal": determine_signal("USD/JPY", usd_jpy),
+            "desc": "Carry-trade stress"
         },
         {
-            "name": "10-Year Treasury Yield",
-            "value": f"{treasury_10y:.2f}%" if treasury_10y else "DATA ERROR",
-            "signal": determine_signal("10-Year Treasury Yield", treasury_10y)
+            "name": "USD/CNH",
+            "value": f"{usd_cnh:.4f}" if usd_cnh else "N/A",
+            "signal": determine_signal("USD/CNH", usd_cnh),
+            "desc": "Yuan stability"
+        },
+        {
+            "name": "China Credit Proxy (CBON)",
+            "value": f"${cbon_etf:.2f}" if cbon_etf else "N/A",
+            "signal": determine_signal("China Credit Proxy (CBON)", cbon_etf),
+            "desc": "LGFV/Bond stress proxy"
+        },
+        {
+            "name": "10Y Treasury Yield",
+            "value": f"{yield_10y:.2f}%" if yield_10y else "N/A",
+            "signal": determine_signal("10Y Treasury Yield", yield_10y),
+            "desc": "Systemic risk trigger"
+        },
+        {
+            "name": move_name,
+            "value": f"{move_index:.2f}" if move_index else "N/A",
+            "signal": determine_signal("MOVE Index", move_index),
+            "desc": "Treasury volatility"
         }
     ]
     
-    # Calculate composite risk
-    risk_assessment = calculate_composite_risk_score(new_metrics)
-
-    # Generate AI Insights
-    ai_insights = generate_ai_insights(new_metrics)
+    # 3. Generate Output
+    risk = calculate_composite_risk(metrics)
+    ai_insights = generate_ai_insights(metrics)
     
-    # Create final data object
     final_data = {
         "last_update": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
-        "target_date": "2026-11-28",
-        "days_remaining": (datetime(2026, 11, 28) - datetime.now()).days,
-        "risk_assessment": risk_assessment,
-        "metrics": new_metrics,
-        "ai_insights": ai_insights
+        "risk_assessment": risk,
+        "metrics": metrics,
+        "ai_insights": ai_insights,
+        "days_remaining": (datetime(2026, 11, 28) - datetime.now()).days
     }
     
-    # Save to current data file
-    try:
-        with open(DATA_FILE, 'w', encoding='utf-8') as f:
-            json.dump(final_data, f, ensure_ascii=False, indent=4)
-        logging.info(f"Successfully updated {DATA_FILE}")
-    except IOError as e:
-        logging.error(f"Failed to write to {DATA_FILE}: {e}")
-    
-    # Update historical data
+    with open(DATA_FILE, 'w', encoding='utf-8') as f:
+        json.dump(final_data, f, indent=4)
+        
+    # History
+    history = load_historical_data()
     history.append(final_data)
     save_historical_data(history)
+    logging.info("Update complete.")
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     update_tracing_data()
