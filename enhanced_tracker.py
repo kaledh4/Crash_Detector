@@ -231,39 +231,55 @@ def calculate_composite_risk_score(metrics: List[Dict]) -> Dict:
 
 
 def fetch_financial_news() -> List[Dict]:
-    """Fetch latest financial news from NewsAPI."""
-    news_api_key = os.environ.get('NEWS_API_KEY')
-    if not news_api_key:
-        logging.warning("NEWS_API_KEY not found. Using fallback news.")
-        return []
+    """Fetch latest financial news from free RSS feeds (no API key needed)."""
+    logging.info("Fetching financial news from RSS feeds...")
+    
+    # Free RSS feeds from major financial news sources
+    rss_feeds = [
+        "https://finance.yahoo.com/news/rssindex",  # Yahoo Finance
+        "https://www.reuters.com/business/finance/rss",  # Reuters Finance
+        "https://www.marketwatch.com/rss/topstories",  # MarketWatch
+    ]
+    
+    all_articles = []
     
     try:
-        url = "https://newsapi.org/v2/everything"
-        params = {
-            "q": "market crash OR financial crisis OR stock market OR recession",
-            "language": "en",
-            "sortBy": "publishedAt",
-            "pageSize": 10,
-            "apiKey": news_api_key
-        }
-        response = requests.get(url, params=params, timeout=10)
-        response.raise_for_status()
-        data = response.json()
+        import feedparser
         
-        if data.get("status") == "ok":
-            articles = data.get("articles", [])
-            return [
-                {
-                    "title": article.get("title", ""),
-                    "description": article.get("description", ""),
-                    "source": article.get("source", {}).get("name", "Unknown"),
-                    "publishedAt": article.get("publishedAt", "")
-                }
-                for article in articles[:5]  # Top 5 news
-            ]
+        for feed_url in rss_feeds:
+            try:
+                feed = feedparser.parse(feed_url)
+                
+                for entry in feed.entries[:3]:  # Top 3 from each source
+                    # Filter for crash/crisis related news
+                    title = entry.get('title', '').lower()
+                    summary = entry.get('summary', entry.get('description', '')).lower()
+                    
+                    # Check if news is relevant to market crashes/crises
+                    keywords = ['crash', 'crisis', 'recession', 'volatility', 'market', 
+                               'stock', 'fed', 'interest rate', 'inflation', 'sell-off',
+                               'correction', 'bear market', 'treasury', 'yield']
+                    
+                    if any(keyword in title or keyword in summary for keyword in keywords):
+                        all_articles.append({
+                            "title": entry.get('title', 'No title'),
+                            "description": entry.get('summary', entry.get('description', 'No description'))[:200],
+                            "source": feed.feed.get('title', 'Unknown'),
+                            "publishedAt": entry.get('published', 'Unknown date')
+                        })
+                
+            except Exception as e:
+                logging.warning(f"Failed to fetch from {feed_url}: {e}")
+                continue
+        
+        # Return top 5 most recent relevant articles
+        return all_articles[:5]
+        
+    except ImportError:
+        logging.error("feedparser library not installed. Install with: pip install feedparser")
         return []
     except Exception as e:
-        logging.error(f"News fetch failed: {e}")
+        logging.error(f"RSS feed fetch failed: {e}")
         return []
 
 
