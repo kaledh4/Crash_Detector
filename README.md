@@ -11,7 +11,7 @@ A daily market intelligence tool that tracks key financial stress indicators and
 
 **For Informational Purposes Only**
 
-The "Stock Picks" and "Saudi TASI Opportunities" sections are generated based on **real-time market data**, **risk metrics**, and **trend analysis**. They are for demonstration and showcase purposes only and do not constitute financial advice.
+These sections are generated based on **Latest Financial News Summary**, **Risk Metrics**, and **Key Stress Indicators**. They are for demonstration and showcase purposes only and do not constitute financial advice.
 
 - ⚠️ **Do not trade based on these recommendations.**
 - 📚 **Always conduct your own due diligence.**
