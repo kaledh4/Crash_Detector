@@ -16,8 +16,8 @@ JPY_STRESS_THRESHOLD = 150.0
 JPY_CRITICAL_THRESHOLD = 155.0
 CNH_STRESS_THRESHOLD = 7.25
 CNH_CRITICAL_THRESHOLD = 7.4
-MOVE_PROXY_HIGH = 120.0  # Adjusted for actual MOVE index levels if available, or VIX proxy
-MOVE_PROXY_CRITICAL = 140.0
+MOVE_PROXY_HIGH = 90.0   # Updated based on long-term average
+MOVE_PROXY_CRITICAL = 120.0
 
 # Auction Thresholds
 AUCTION_BTC_STRESS = 2.3  # Bid-to-Cover Ratio
@@ -131,6 +131,95 @@ def save_historical_data(history: List[Dict]):
     except Exception as e:
         logging.error(f"Failed to save history: {e}")
 
+def calculate_volatility(current_value: float, history: List[Dict], metric_name: str) -> Optional[float]:
+    """Calculate 24h volatility for a given metric."""
+    if not history or current_value is None:
+        return None
+    
+    # Find yesterday's value
+    yesterday = None
+    for entry in reversed(history):
+        for metric in entry.get('metrics', []):
+            if metric['name'] == metric_name and metric['value'] != "DATA ERROR":
+                try:
+                    # Clean value string (remove %, x, etc)
+                    val_str = str(metric['value']).replace('%', '').replace('x', '').replace('$', '').replace(',', '')
+                    yesterday = float(val_str)
+                    break
+                except (ValueError, TypeError):
+                    continue
+        if yesterday:
+            break
+    
+    if yesterday:
+        return abs(current_value - yesterday)
+    return None
+
+def calculate_convergence_score(current_metrics: List[Dict], history: List[Dict]) -> Dict:
+    """
+    Calculate Convergence Score based on 30-day trends for:
+    1. 10Y Yield (Rising = Stress)
+    2. USD/JPY (Rising = Stress)
+    3. USD/CNH (Rising = Stress)
+    4. MOVE Index (Rising = Stress)
+    """
+    if not history or len(history) < 2:
+        return {"score": 0, "status": "Insufficient History", "details": "Need more data points"}
+
+    # Target metrics to track
+    targets = ["10Y Treasury Yield", "USD/JPY", "USD/CNH", "MOVE Index"]
+    trends = {}
+    
+    # Get values from ~30 days ago (or oldest available)
+    oldest_entry = history[0]
+    
+    stress_count = 0
+    total_change = 0.0
+    
+    details = []
+
+    for m in current_metrics:
+        if m['name'] in targets:
+            try:
+                curr_val = float(str(m['value']).replace('%', '').replace('x', '').replace('$', '').replace(',', ''))
+                
+                # Find old value
+                old_val = None
+                for old_m in oldest_entry.get('metrics', []):
+                    if old_m['name'] == m['name']:
+                        old_val = float(str(old_m['value']).replace('%', '').replace('x', '').replace('$', '').replace(',', ''))
+                        break
+                
+                if old_val:
+                    change = ((curr_val - old_val) / old_val) * 100
+                    trends[m['name']] = change
+                    
+                    # Check if moving in stress direction (Positive change for all these 4 means stress)
+                    if change > 2.0: # > 2% increase
+                        stress_count += 1
+                        details.append(f"{m['name']} (+{change:.1f}%)")
+                    elif change < -2.0:
+                        details.append(f"{m['name']} ({change:.1f}%)")
+                    else:
+                        details.append(f"{m['name']} (Flat)")
+            except:
+                continue
+
+    # Score calculation: 0-100
+    # 4 metrics. If all 4 are rising > 2%, score is 100.
+    score = (stress_count / 4) * 100
+    
+    status = "Low Convergence"
+    if score >= 75: status = "CRITICAL CONVERGENCE"
+    elif score >= 50: status = "Moderate Convergence"
+    elif score >= 25: status = "Early Signs"
+    
+    return {
+        "score": round(score, 1), 
+        "status": status, 
+        "details": ", ".join(details)
+    }
+
 def determine_signal(metric_name: str, value: float, extra_data: Dict = None) -> str:
     """Determine stress signal based on thresholds."""
     if value is None:
@@ -158,7 +247,7 @@ def determine_signal(metric_name: str, value: float, extra_data: Dict = None) ->
     elif metric_name == "MOVE Index":
         if value >= MOVE_PROXY_CRITICAL: return "CRITICAL SHOCK"
         if value >= MOVE_PROXY_HIGH: return "HIGH STRESS"
-        if value > 100.0: return "RISING STRESS"
+        if value > 80.0: return "RISING STRESS"
 
     # 5. Auction Bid-to-Cover
     elif metric_name == "10Y Auction Bid-to-Cover":
@@ -190,7 +279,7 @@ def calculate_composite_risk(metrics: List[Dict]) -> Dict:
     if avg >= 35: return {"score": round(avg, 1), "level": "ELEVATED", "color": "#ffc107"}
     return {"score": round(avg, 1), "level": "LOW", "color": "#28a745"}
 
-def generate_ai_insights(metrics: List[Dict]) -> Dict:
+def generate_ai_insights(metrics: List[Dict], convergence: Dict) -> Dict:
     if not OPENROUTER_API_KEY:
         return {"crash_analysis": "AI Key Missing", "news_summary": "AI Key Missing"}
         
@@ -198,6 +287,7 @@ def generate_ai_insights(metrics: List[Dict]) -> Dict:
     news_text = "\n".join([f"- {n['title']}" for n in news])
     
     metrics_str = json.dumps(metrics, indent=2)
+    convergence_str = json.dumps(convergence, indent=2)
     
     prompt = f"""
     Analyze these market metrics for a "Global Financial Fault Lines" convergence event.
@@ -210,6 +300,9 @@ def generate_ai_insights(metrics: List[Dict]) -> Dict:
     
     **METRICS:**
     {metrics_str}
+    
+    **CONVERGENCE SCORE (30-Day Trend):**
+    {convergence_str}
     
     **NEWS:**
     {news_text}
@@ -308,7 +401,7 @@ def update_tracing_data():
             "name": "China Credit Proxy (CBON)",
             "value": f"${cbon_etf:.2f}" if cbon_etf else "N/A",
             "signal": determine_signal("China Credit Proxy (CBON)", cbon_etf),
-            "desc": "LGFV/Bond stress proxy"
+            "desc": "VanEck China Bond ETF - Proxy for LGFV/Credit Stress"
         },
         {
             "name": "10Y Treasury Yield",
@@ -320,17 +413,20 @@ def update_tracing_data():
             "name": move_name,
             "value": f"{move_index:.2f}" if move_index else "N/A",
             "signal": determine_signal("MOVE Index", move_index),
-            "desc": "Treasury volatility"
+            "desc": "Treasury volatility (Stress > 90)"
         }
     ]
     
     # 3. Generate Output
+    history = load_historical_data()
+    convergence = calculate_convergence_score(metrics, history)
     risk = calculate_composite_risk(metrics)
-    ai_insights = generate_ai_insights(metrics)
+    ai_insights = generate_ai_insights(metrics, convergence)
     
     final_data = {
         "last_update": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "risk_assessment": risk,
+        "convergence_score": convergence,
         "metrics": metrics,
         "ai_insights": ai_insights,
         "days_remaining": (datetime(2026, 11, 28) - datetime.now()).days
@@ -340,7 +436,6 @@ def update_tracing_data():
         json.dump(final_data, f, indent=4)
         
     # History
-    history = load_historical_data()
     history.append(final_data)
     save_historical_data(history)
     logging.info("Update complete.")

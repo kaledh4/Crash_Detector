@@ -374,5 +374,67 @@
       "news_summary": "<ul><li>Market Sentiment: Mixed (Big Tech Gains vs. USD/JPY Stress)</li><li>Notable Movers: Puma (Takeover Speculation), Meta/Microsoft (Tech Rally)</li><li>Oil and Nuclear Stock Headlines Suggest Sector-Specific Volatility</li><li>No Direct News Links to Treasury, China Credit, or JPY Crisis</li></ul>"
     },
     "days_remaining": 364
+  },
+  {
+    "last_update": "2025-11-28 19:17:07 UTC",
+    "risk_assessment": {
+      "score": 14.3,
+      "level": "LOW",
+      "color": "#28a745"
+    },
+    "convergence_score": {
+      "score": 0.0,
+      "status": "Low Convergence",
+      "details": ""
+    },
+    "metrics": [
+      {
+        "name": "10Y Treasury Auction Bid-to-Cover",
+        "value": "2.43x",
+        "signal": "NORMAL",
+        "desc": "Demand strength (Stress < 2.3x)"
+      },
+      {
+        "name": "30Y Auction Tail",
+        "value": "N/A",
+        "signal": "NORMAL",
+        "desc": "Dealer reluctance (Stress > 3bps)"
+      },
+      {
+        "name": "USD/JPY",
+        "value": "156.13",
+        "signal": "CRITICAL SHOCK",
+        "desc": "Carry-trade stress"
+      },
+      {
+        "name": "USD/CNH",
+        "value": "7.0680",
+        "signal": "NORMAL",
+        "desc": "Yuan stability"
+      },
+      {
+        "name": "China Credit Proxy (CBON)",
+        "value": "$22.58",
+        "signal": "NORMAL",
+        "desc": "VanEck China Bond ETF - Proxy for LGFV/Credit Stress"
+      },
+      {
+        "name": "10Y Treasury Yield",
+        "value": "4.02%",
+        "signal": "NORMAL",
+        "desc": "Systemic risk trigger"
+      },
+      {
+        "name": "MOVE Index",
+        "value": "71.90",
+        "signal": "NORMAL",
+        "desc": "Treasury volatility (Stress > 90)"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": "<ul><li><b>Convergence Status</b>: <span style='color:red'>LOW CONVERGENCE (0.0 score)</span> \u2014 No simultaneous stress signals in yields, USD/JPY, USD/CNH, or China credit proxies.</li><li>1. <b>SIMULTANEOUS MOVEMENT</b>: <span style='color:orange'>Only USD/JPY (156.13) shows CRITICAL SHOCK</span>. US yields (4.02%), USD/CNH (7.0680), and China credit (CBON: $22.58) remain stable.</li><li>2. <b>10Y Auction Bid-to-Cover</b>: <span style='color:green'>Normal demand (2.43x)</span> \u2014 No funding shock (stress threshold: <2.3x).</li><li>3. <b>China Credit Stress</b>: <span style='color:green'>No LGFV distress</span> \u2014 VanEck China Bond ETF trades normally.</li></ul>",
+      "news_summary": "<ul><li><b>Market Sentiment</b>: Big Tech rebound (Meta, Microsoft post largest weekly gains since May).</li><li><b>Risk Factors</b>: Layoffs surge globally, raising economic anxiety.</li><li><b>Asia-Specific</b>: Hong Kong insurers face $334M liabilities from Tai Po fire payouts.</li></ul>"
+    },
+    "days_remaining": 364
   }
 ]

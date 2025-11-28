@@ -3,9 +3,27 @@
 A daily market intelligence tool that tracks key financial stress indicators and provides AI-generated insights.
 
 ## Features
-- **Real-time Stress Tracking**: Monitors **true market numbers** including USD/JPY, USD/CNH, MOVE Index, and 10-Year Treasury Yields to detect sovereign risk.
-- **Risk-Based Analysis**: Generates daily "Stock Picks" and "Saudi TASI Opportunities" by analyzing **calculated stress levels**, **market risks**, and **recent financial news trends**.
+- **Real-time Stress Tracking**: Monitors **7 Key Indicators** including Treasury Auctions, USD/JPY, USD/CNH, and China Credit Stress.
+- **Convergence Analysis**: Calculates a **Convergence Score** to track the simultaneous movement of global risk factors.
+- **AI-Powered Insights**: Generates daily crash probability analysis based on live data and news.
 - **PWA Support**: Installable on Desktop and Mobile for easy access.
+
+## 📊 Methodology: The 7 Key Indicators
+
+This dashboard tracks the "Convergence of Fault Lines" theory, monitoring three specific systemic risks:
+
+### 1. U.S. Treasury Funding Shock
+*   **10Y Auction Bid-to-Cover**: Measures demand strength. (Stress < 2.3x)
+*   **30Y Auction Tail**: Measures dealer reluctance. (Stress > 3bps)
+*   **MOVE Index**: Measures bond market volatility. (Stress > 90)
+*   **10Y Treasury Yield**: The systemic trigger.
+
+### 2. Japan’s Carry-Trade Unwind
+*   **USD/JPY**: Tracks the critical pressure point for the carry trade. (Critical > 155.0)
+
+### 3. China’s Credit Crisis
+*   **USD/CNH**: Tracks offshore Yuan devaluation risk.
+*   **China Credit Proxy (CBON)**: Tracks stress in the Chinese local debt market (LGFV).
 
 ## ⚖️ Legal Disclaimer
 
