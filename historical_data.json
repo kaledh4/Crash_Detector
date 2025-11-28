@@ -35,5 +35,42 @@
       "stock_picks": "AI Analysis Failed",
       "tasi_opportunities": "AI Analysis Failed"
     }
+  },
+  {
+    "last_update": "2025-11-28 12:46:26 UTC",
+    "target_date": "2026-11-28",
+    "days_remaining": 364,
+    "risk_assessment": {
+      "score": 22.5,
+      "level": "MODERATE",
+      "color": "#fd7e14"
+    },
+    "metrics": [
+      {
+        "name": "USD/JPY Exchange Rate",
+        "value": "156.1240",
+        "signal": "HIGH STRESS",
+        "volatility_24h": "0.04"
+      },
+      {
+        "name": "USD/CNH (Offshore Yuan) Value",
+        "value": "7.0707",
+        "signal": "NORMAL"
+      },
+      {
+        "name": "MOVE Index Volatility (Proxy)",
+        "value": "45.00",
+        "signal": "RISING STRESS"
+      },
+      {
+        "name": "10-Year Treasury Yield",
+        "value": "4.09%",
+        "signal": "NORMAL"
+      }
+    ],
+    "ai_insights": {
+      "stock_picks": "AI Busy: Rate Limit Exceeded (429)",
+      "tasi_opportunities": "AI Busy: Rate Limit Exceeded (429)"
+    }
   }
 ]

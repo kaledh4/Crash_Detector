@@ -1,5 +1,5 @@
 {
-    "last_update": "2025-11-28 12:28:01 UTC",
+    "last_update": "2025-11-28 12:46:26 UTC",
     "target_date": "2026-11-28",
     "days_remaining": 364,
     "risk_assessment": {
@@ -10,13 +10,13 @@
     "metrics": [
         {
             "name": "USD/JPY Exchange Rate",
-            "value": "156.1610",
+            "value": "156.1240",
             "signal": "HIGH STRESS",
-            "volatility_24h": "N/A"
+            "volatility_24h": "0.04"
         },
         {
             "name": "USD/CNH (Offshore Yuan) Value",
-            "value": "7.0728",
+            "value": "7.0707",
             "signal": "NORMAL"
         },
         {
@@ -31,7 +31,7 @@
         }
     ],
     "ai_insights": {
-        "stock_picks": "AI Analysis Failed",
-        "tasi_opportunities": "AI Analysis Failed"
+        "stock_picks": "AI Busy: Rate Limit Exceeded (429)",
+        "tasi_opportunities": "AI Busy: Rate Limit Exceeded (429)"
     }
 }
