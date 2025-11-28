@@ -122,30 +122,15 @@
                     <div class="loading-skeleton">
                         <div class="skeleton-line"></div>
                         <div class="skeleton-line"></div>
-                        <div class="skeleton-line short"></div>
-                    </div>
-                </div>
-            </div>
-
-            <footer
-                style="margin-top: 4rem; text-align: center; color: var(--color-text-tertiary); font-size: 0.875rem;">
-                <p>For informational purposes only. See <a href="https://github.com/crash-detector/README.md"
-                        style="color: var(--color-accent-primary);">README</a> for full legal disclaimer.</p>
-            </footer>
-        </main>
-    </div>
-
-    <script src="app.js"></script>
-    <script>
-        // Remove loading screen when loaded
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('loading-screen');
-                loader.classList.add('hidden');
-                setTimeout(() => loader.remove(), 500);
-            }, 1000);
-        });
-    </script>
+                        // Remove loading screen when loaded
+                        window.addEventListener('load', () => {
+                        setTimeout(() => {
+                        const loader = document.getElementById('loading-screen');
+                        loader.classList.add('hidden');
+                        setTimeout(() => loader.remove(), 500);
+                        }, 1000);
+                        });
+                        </script>
 </body>
 
 </html>
