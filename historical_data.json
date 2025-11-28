@@ -146,5 +146,46 @@
       "crash_analysis": "<ul><li><strong>Status:</strong> CLOSE (40-69% probability)</li><li><strong>Key Indicators:</strong> USD/JPY exchange rate at 156.1190 signals HIGH STRESS, potentially indicating capital flight or loss of confidence in Japanese markets. MOVE Index proxy volatility at 45.00 shows RISING STRESS in fixed income markets, though 10-Year Treasury yields remain stable at 4.09%.</li><li><strong>Missing Data:</strong> No recent news complicates analysis, but historical patterns suggest currency stress (USD/JPY) and bond volatility (MOVE) often precede broader market corrections.</li><li><strong>Triggers to Watch:</strong> USD/JPY breaking above 160 (intervention threshold), MOVE Index surpassing 50 (extreme volatility), or sudden Treasury yield spike above 4.5%.</li><li><strong>Timeline:</strong> If triggers activate, high-risk window would be 2-6 months.</li></ul>",
       "news_summary": "<ul><li><strong>No Recent News Available:</strong> Lack of data limits confirmation of stress signals from market metrics.</li><li><strong>Contextual Note:</strong> USD/JPY levels near 34-year highs (per prior trends) suggest underlying fragility not captured in current headlines.</li><li><strong>Monitoring Gap:</strong> Missing news on BOJ/Fed policy moves or Asian market instability leaves critical blind spots in analysis.</li></ul>"
     }
+  },
+  {
+    "last_update": "2025-11-28 18:48:02 UTC",
+    "target_date": "2026-11-28",
+    "days_remaining": 364,
+    "risk_assessment": {
+      "score": 22.5,
+      "level": "MODERATE",
+      "color": "#fd7e14"
+    },
+    "metrics": [
+      {
+        "name": "USD/JPY Exchange Rate",
+        "value": "156.1570",
+        "signal": "HIGH STRESS",
+        "volatility_24h": "0.04"
+      },
+      {
+        "name": "USD/CNH (Offshore Yuan) Value",
+        "value": "7.0682",
+        "signal": "NORMAL"
+      },
+      {
+        "name": "MOVE Index Volatility (Proxy)",
+        "value": "45.00",
+        "signal": "RISING STRESS"
+      },
+      {
+        "name": "10-Year Treasury Yield",
+        "value": "4.09%",
+        "signal": "NORMAL"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": {
+        "html": "<ul><li><strong>Current Stress Levels:</strong> USD/JPY at 156.1570 (HIGH STRESS) indicates potential currency instability, while MOVE Index Volatility Proxy at 45.00 (RISING STRESS) shows increasing bond market turbulence. 10-Year Treasury Yield remains stable at 4.09% (NORMAL).</li><li><strong>News Impact:</strong> 'Oil Prices Stable' and Big Tech rally headlines suggest short-term stability in key sectors, contradicting immediate crash signals despite FX stress.</li><li><strong>Critical Triggers:</strong> Watch for USD/JPY breaking above 158 (historic intervention zone) or MOVE Index surpassing 60 (2020 crash levels).</li><li><strong>Timeline Estimate:</strong> CLOSE (40-69% probability) - Elevated risk but no immediate catalyst. Potential 3-6 month window for stress accumulation if triggers are hit.</li></ul>"
+      },
+      "news_summary": {
+        "html": "<ul><li><strong>Oil Price Stability</strong> (Yahoo Finance): Neutral impact - Suggests no immediate commodity shock but masks underlying FX/rate risks.</li><li><strong>Big Tech Rally</strong> (MarketWatch): Mixed signal - While stock gains improve sentiment, concentration risk remains if rates rise unexpectedly.</li><li><strong>No Major Risk-Off Headlines:</strong> Absence of banking crisis or recession news temporarily lowers crash probability but doesn't eliminate structural risks.</li></ul>"
+      }
+    }
   }
 ]
