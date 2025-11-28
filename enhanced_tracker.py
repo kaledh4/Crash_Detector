@@ -230,16 +230,60 @@ def calculate_composite_risk_score(metrics: List[Dict]) -> Dict:
         return {"score": round(avg_score, 1), "level": "LOW", "color": "#28a745"}
 
 
+def fetch_financial_news() -> List[Dict]:
+    """Fetch latest financial news from NewsAPI."""
+    news_api_key = os.environ.get('NEWS_API_KEY')
+    if not news_api_key:
+        logging.warning("NEWS_API_KEY not found. Using fallback news.")
+        return []
+    
+    try:
+        url = "https://newsapi.org/v2/everything"
+        params = {
+            "q": "market crash OR financial crisis OR stock market OR recession",
+            "language": "en",
+            "sortBy": "publishedAt",
+            "pageSize": 10,
+            "apiKey": news_api_key
+        }
+        response = requests.get(url, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        
+        if data.get("status") == "ok":
+            articles = data.get("articles", [])
+            return [
+                {
+                    "title": article.get("title", ""),
+                    "description": article.get("description", ""),
+                    "source": article.get("source", {}).get("name", "Unknown"),
+                    "publishedAt": article.get("publishedAt", "")
+                }
+                for article in articles[:5]  # Top 5 news
+            ]
+        return []
+    except Exception as e:
+        logging.error(f"News fetch failed: {e}")
+        return []
+
+
 def generate_ai_insights(metrics: List[Dict]) -> Dict:
-    """Generate Stock Picks and TASI Opportunities using OpenRouter."""
+    """Generate crash probability analysis based on metrics and real news."""
     if not OPENROUTER_API_KEY:
         logging.warning("OPENROUTER_API_KEY not found. Skipping AI insights.")
         return {
-            "stock_picks": "AI Analysis Unavailable (Missing API Key)",
-            "tasi_opportunities": "AI Analysis Unavailable (Missing API Key)"
+            "crash_analysis": "AI Analysis Unavailable (Missing API Key)",
+            "news_summary": "News Unavailable (Missing API Key)"
         }
 
-    logging.info("Generating AI insights via OpenRouter...")
+    logging.info("Fetching financial news and generating crash analysis...")
+    
+    # Fetch real news
+    news_articles = fetch_financial_news()
+    news_context = "\n".join([
+        f"- {article['title']} ({article['source']})"
+        for article in news_articles
+    ]) if news_articles else "No recent news available"
     
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
@@ -250,28 +294,43 @@ def generate_ai_insights(metrics: List[Dict]) -> Dict:
 
     metrics_str = json.dumps(metrics, indent=2)
     prompt = f"""
-    You are a financial risk analyst system. 
-    Analyze the following **REAL-TIME MARKET METRICS** and **RISK SIGNALS**:
+    You are a financial crash prediction AI analyzing real-time market data and news.
+    
+    **CURRENT MARKET METRICS:**
     {metrics_str}
+    
+    **LATEST FINANCIAL NEWS (Real headlines from today):**
+    {news_context}
 
-    Based strictly on these numbers, the calculated risk levels, and your knowledge of **recent global financial news**:
+    Based on these REAL metrics and news, provide a crash probability analysis:
 
-    1. **"Stock Picks"**: Identify 3-5 global stocks or sectors that are resilient or opportunistic given the specific stress signals above (e.g., if Yields are high, look for value; if JPY is volatile, look for hedges).
-    2. **"Saudi TASI Opportunities"**: Identify 3-5 opportunities in the Saudi TASI market, correlating them with the global oil/risk environment suggested by the data.
+    1. **"crash_analysis"**: Analyze the likelihood of a market crash in the next 12 months. Categorize as:
+       - **MOST LIKELY TRUE** (70-100% probability): Clear signs of imminent crash
+       - **CLOSE** (40-69% probability): Significant warning signs, elevated risk
+       - **FAR** (0-39% probability): Low risk, stable conditions
+       
+       Provide 3-4 bullet points explaining:
+       - Current stress levels from the metrics (USD/JPY, yields, volatility)
+       - How recent news headlines support or contradict crash signals
+       - Specific trigger points to watch
+       - Timeline estimate if crash seems likely
 
-    **CRITICAL GUIDELINES:**
-    - Focus on **RISK MANAGEMENT** and **TRUE NUMBERS**.
-    - Do not hallucinate data. Use the provided metrics as the ground truth for your rationale.
-    - Mention specific risks (e.g., "Due to high 10Y Yields...") in your explanation.
-    - Keep it concise, professional, and actionable (but strictly educational).
+    2. **"news_summary"**: Summarize the top 3 most relevant news items and their impact on crash probability.
 
-    Format the output as a JSON object with keys "stock_picks" and "tasi_opportunities", containing HTML strings (inner content only).
+    **CRITICAL RULES:**
+    - Use ONLY the provided metrics and news headlines
+    - Be specific about numbers (e.g., "USD/JPY at 156.09 indicates...")
+    - Reference actual news headlines
+    - Give honest probability assessment
+    - Keep it concise and actionable
+
+    Format as JSON with keys "crash_analysis" and "news_summary", containing HTML strings (use <ul><li> for lists).
     """
 
     data = {
         "model": "tngtech/tng-r1t-chimera:free",
         "messages": [
-            {"role": "system", "content": "You are a financial analyst AI. Provide insights for demonstration purposes only."},
+            {"role": "system", "content": "You are a financial crash prediction AI. Analyze real data and news to predict market crash probability."},
             {"role": "user", "content": prompt}
         ],
         "response_format": {"type": "json_object"}
@@ -289,7 +348,7 @@ def generate_ai_insights(metrics: List[Dict]) -> Dict:
         
         content = result['choices'][0]['message']['content']
         
-        # Enhanced JSON parsing using Regex to find the first JSON object
+        # Enhanced JSON parsing
         import re
         json_match = re.search(r'\{.*\}', content, re.DOTALL)
         
@@ -297,8 +356,8 @@ def generate_ai_insights(metrics: List[Dict]) -> Dict:
             json_str = json_match.group(0)
             parsed_content = json.loads(json_str)
             return {
-                "stock_picks": parsed_content.get("stock_picks", "Analysis Data Missing"),
-                "tasi_opportunities": parsed_content.get("tasi_opportunities", "Analysis Data Missing")
+                "crash_analysis": parsed_content.get("crash_analysis", "Analysis Data Missing"),
+                "news_summary": parsed_content.get("news_summary", "News Summary Missing")
             }
         else:
             logging.error(f"Raw AI Response (No JSON found): {content}")
@@ -306,7 +365,6 @@ def generate_ai_insights(metrics: List[Dict]) -> Dict:
 
     except Exception as e:
         logging.error(f"AI Generation failed: {e}")
-        # Create a user-friendly error message
         error_str = str(e)
         if "401" in error_str:
             ui_error = "AI Configuration Error: Invalid API Key (401)"
@@ -318,8 +376,8 @@ def generate_ai_insights(metrics: List[Dict]) -> Dict:
             ui_error = f"AI Analysis Failed: {error_str[:30]}..."
 
         return {
-            "stock_picks": ui_error,
-            "tasi_opportunities": ui_error
+            "crash_analysis": ui_error,
+            "news_summary": ui_error
         }
 
 

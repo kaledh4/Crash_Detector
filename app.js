@@ -94,13 +94,13 @@ function renderDashboard(data) {
         metricsContainer.appendChild(card);
     });
 
-    // Render AI Insights
+    // Render AI Insights - Updated to use crash_analysis and news_summary
     if (data.ai_insights) {
-        const stockPicksEl = document.getElementById('stock-picks-content');
-        const tasiEl = document.getElementById('tasi-content');
+        const crashAnalysisEl = document.getElementById('crash-analysis-content');
+        const newsSummaryEl = document.getElementById('news-summary-content');
 
-        if (stockPicksEl) stockPicksEl.innerHTML = data.ai_insights.stock_picks || 'No data available.';
-        if (tasiEl) tasiEl.innerHTML = data.ai_insights.tasi_opportunities || 'No data available.';
+        if (crashAnalysisEl) crashAnalysisEl.innerHTML = data.ai_insights.crash_analysis || 'No data available.';
+        if (newsSummaryEl) newsSummaryEl.innerHTML = data.ai_insights.news_summary || 'No data available.';
     }
 }
 
