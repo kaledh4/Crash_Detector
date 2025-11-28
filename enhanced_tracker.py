@@ -269,7 +269,7 @@ def generate_ai_insights(metrics: List[Dict]) -> Dict:
     """
 
     data = {
-        "model": "google/gemini-2.0-flash-exp:free",
+        "model": "tngtech/tng-r1t-chimera:free",
         "messages": [
             {"role": "system", "content": "You are a financial analyst AI. Provide insights for demonstration purposes only."},
             {"role": "user", "content": prompt}
