@@ -1031,3 +1031,8 @@ body::before {
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+/* Footer */
+.app-footer { max-width: 1400px; margin: 0 auto; padding: 3rem 2rem; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.app-footer p { color: #8585ad; font-size: 0.875rem; margin: 0; }
+.app-footer a { color: #00d4ff; text-decoration: none; transition: color 250ms ease-in-out; }
+.app-footer a:hover { color: #7b2ff7; text-decoration: underline; }
