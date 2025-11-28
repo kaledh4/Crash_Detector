@@ -122,15 +122,32 @@
                     <div class="loading-skeleton">
                         <div class="skeleton-line"></div>
                         <div class="skeleton-line"></div>
-                        // Remove loading screen when loaded
-                        window.addEventListener('load', () => {
-                        setTimeout(() => {
-                        const loader = document.getElementById('loading-screen');
-                        loader.classList.add('hidden');
-                        setTimeout(() => loader.remove(), 500);
-                        }, 1000);
-                        });
-                        </script>
+                        <div class="skeleton-line short"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <p>For informational purposes only. See <a
+                    href="https://github.com/kaledh4/Crash_Detector/blob/main/README.md" target="_blank">README</a> for
+                full legal disclaimer.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Remove loading screen when loaded
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loading-screen');
+                if (loader) {
+                    loader.classList.add('hidden');
+                    setTimeout(() => loader.remove(), 500);
+                }
+            }, 1000);
+        });
+    </script>
+    <script src="app.js"></script>
 </body>
 
 </html>
