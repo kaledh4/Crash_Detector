@@ -1,5 +1,5 @@
 {
-    "last_update": "2025-11-28 19:20:15 UTC",
+    "last_update": "2025-11-29 06:23:50 UTC",
     "risk_assessment": {
         "score": 14.3,
         "level": "LOW",
@@ -25,13 +25,13 @@
         },
         {
             "name": "USD/JPY",
-            "value": "156.13",
+            "value": "156.28",
             "signal": "CRITICAL SHOCK",
             "desc": "Carry-trade stress"
         },
         {
             "name": "USD/CNH",
-            "value": "7.0680",
+            "value": "7.0686",
             "signal": "NORMAL",
             "desc": "Yuan stability"
         },
@@ -49,14 +49,14 @@
         },
         {
             "name": "MOVE Index",
-            "value": "71.90",
+            "value": "68.95",
             "signal": "NORMAL",
             "desc": "Treasury volatility (Stress > 90)"
         }
     ],
     "ai_insights": {
-        "crash_analysis": "<ul><li><strong>Convergence Status:</strong> \ud83d\udd34 <span style='color: red;'>Low Convergence (Score: 0.0)</span> - Key metrics <u>do not</u> currently align for a crash scenario.</li><li><strong>US Treasury Funding Shock:</strong> Auction Bid-to-Cover (2.43x) is above stress threshold (2.3x), yields (4.02%) stable. No immediate Treasury funding stress.</li><li><strong>Japan Carry-Trade Unwind:</strong> \u26a0\ufe0f USD/JPY (156.13) signals <span style='color: red;'>CRITICAL SHOCK</span>, but lacks broader confirmation (yields, USD/CNH stable). Monitor for spillover.</li><li><strong>China Credit Crisis:</strong> Yuan (7.0680) and LGFV proxy (CBON $22.58) show <u>no stress</u>. Default risks contained for now.</li></ul>",
-        "news_summary": "<ul><li><strong>Tech Rally:</strong> Meta and Microsoft stocks post largest weekly gains since May, signaling potential Big Tech rebound.</li><li><strong>Labor Market Stress:</strong> Layoffs rising across industries, increasing worker anxiety.</li><li><strong>Insurance Fallout:</strong> Hong Kong insurers face $334M liability from deadly Tai Po fire.</li></ul>"
+        "crash_analysis": "<ul><li><b>Convergence Status</b>: <span style='color:red;'>Low Convergence Detected</span> (Score: 0.0) \u2013 No simultaneous stress signals across key risk vectors.</li><li><b>10Y Treasury Auction Demand</b>: Normal (Bid-to-Cover: 2.43x > 2.3x threshold). No imminent funding shock.</li><li><b>Japan Carry-Trade Unwind</b>: <span style='color:red;'>CRITICAL SHOCK in USD/JPY (156.28)</span> \u2013 Extreme stress in yen carry-trade dynamics, but lacks confirmation from other metrics.</li><li><b>China Credit Stress</b>: Stable (CBON ETF at $22.58, USD/CNH at 7.0686). No signs of LGFV defaults or yuan devaluation.</li><li><b>Missing Simultaneity</b>: Only USD/JPY shows extreme stress; US yields, auctions, and China credit signals remain normal.</li></ul>",
+        "news_summary": "<ul><li><b>Market Sentiment</b>: Stocks rallied in their best Thanksgiving week since 2008, suggesting bullish short-term sentiment.</li><li><b>Safe Havens in Focus</b>: Wealth advisors highlight 'promising' growth sectors as potential hedges.</li><li><b>Macro Risks</b>: Oil markets remain lackluster amid geopolitical/China demand factors; Airbus recall adds supply chain risks.</li></ul>"
     },
-    "days_remaining": 364
+    "days_remaining": 363
 }

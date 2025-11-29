@@ -498,5 +498,67 @@
       "news_summary": "<ul><li><strong>Tech Rally:</strong> Meta and Microsoft stocks post largest weekly gains since May, signaling potential Big Tech rebound.</li><li><strong>Labor Market Stress:</strong> Layoffs rising across industries, increasing worker anxiety.</li><li><strong>Insurance Fallout:</strong> Hong Kong insurers face $334M liability from deadly Tai Po fire.</li></ul>"
     },
     "days_remaining": 364
+  },
+  {
+    "last_update": "2025-11-29 06:23:50 UTC",
+    "risk_assessment": {
+      "score": 14.3,
+      "level": "LOW",
+      "color": "#28a745"
+    },
+    "convergence_score": {
+      "score": 0.0,
+      "status": "Low Convergence",
+      "details": ""
+    },
+    "metrics": [
+      {
+        "name": "10Y Treasury Auction Bid-to-Cover",
+        "value": "2.43x",
+        "signal": "NORMAL",
+        "desc": "Demand strength (Stress < 2.3x)"
+      },
+      {
+        "name": "30Y Auction Tail",
+        "value": "N/A",
+        "signal": "NORMAL",
+        "desc": "Dealer reluctance (Stress > 3bps)"
+      },
+      {
+        "name": "USD/JPY",
+        "value": "156.28",
+        "signal": "CRITICAL SHOCK",
+        "desc": "Carry-trade stress"
+      },
+      {
+        "name": "USD/CNH",
+        "value": "7.0686",
+        "signal": "NORMAL",
+        "desc": "Yuan stability"
+      },
+      {
+        "name": "China Credit Proxy (CBON)",
+        "value": "$22.58",
+        "signal": "NORMAL",
+        "desc": "VanEck China Bond ETF - Proxy for LGFV/Credit Stress"
+      },
+      {
+        "name": "10Y Treasury Yield",
+        "value": "4.02%",
+        "signal": "NORMAL",
+        "desc": "Systemic risk trigger"
+      },
+      {
+        "name": "MOVE Index",
+        "value": "68.95",
+        "signal": "NORMAL",
+        "desc": "Treasury volatility (Stress > 90)"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": "<ul><li><b>Convergence Status</b>: <span style='color:red;'>Low Convergence Detected</span> (Score: 0.0) \u2013 No simultaneous stress signals across key risk vectors.</li><li><b>10Y Treasury Auction Demand</b>: Normal (Bid-to-Cover: 2.43x > 2.3x threshold). No imminent funding shock.</li><li><b>Japan Carry-Trade Unwind</b>: <span style='color:red;'>CRITICAL SHOCK in USD/JPY (156.28)</span> \u2013 Extreme stress in yen carry-trade dynamics, but lacks confirmation from other metrics.</li><li><b>China Credit Stress</b>: Stable (CBON ETF at $22.58, USD/CNH at 7.0686). No signs of LGFV defaults or yuan devaluation.</li><li><b>Missing Simultaneity</b>: Only USD/JPY shows extreme stress; US yields, auctions, and China credit signals remain normal.</li></ul>",
+      "news_summary": "<ul><li><b>Market Sentiment</b>: Stocks rallied in their best Thanksgiving week since 2008, suggesting bullish short-term sentiment.</li><li><b>Safe Havens in Focus</b>: Wealth advisors highlight 'promising' growth sectors as potential hedges.</li><li><b>Macro Risks</b>: Oil markets remain lackluster amid geopolitical/China demand factors; Airbus recall adds supply chain risks.</li></ul>"
+    },
+    "days_remaining": 363
   }
 ]
