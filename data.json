@@ -1,5 +1,5 @@
 {
-    "last_update": "2025-11-30 06:25:12 UTC",
+    "last_update": "2025-12-01 06:28:32 UTC",
     "risk_assessment": {
         "score": 14.3,
         "level": "LOW",
@@ -25,13 +25,13 @@
         },
         {
             "name": "USD/JPY",
-            "value": "156.28",
+            "value": "155.64",
             "signal": "CRITICAL SHOCK",
             "desc": "Carry-trade stress"
         },
         {
             "name": "USD/CNH",
-            "value": "7.0686",
+            "value": "7.0707",
             "signal": "NORMAL",
             "desc": "Yuan stability"
         },
@@ -55,8 +55,8 @@
         }
     ],
     "ai_insights": {
-        "crash_analysis": "<ul><li><strong>Convergence Status:</strong> <span style='color: green;'>Low Convergence (Score: 0.0)</span> - No simultaneous stress signals across core triggers.</li><li><strong>US Treasury Funding Shock:</strong> 10Y Auction Bid-to-Cover (2.43x) and 30Y Auction Tail (N/A) show normal demand/dealer participation. 10Y Yield (4.02%) and MOVE Index (68.95) remain stable.</li><li><strong>Japan Carry-Trade Unwind:</strong> USD/JPY (156.28) is flagged as <span style='color: red;'>CRITICAL SHOCK</span>, but lacks supporting stress in yields/volatility for systemic risk.</li><li><strong>China Credit Crisis:</strong> No stress signals in USD/CNH (7.0686) or China Credit Proxy (CBON at $22.58).</li><li><strong>Conclusion:</strong> Isolated USD/JPY stress insufficient for systemic crash; other metrics show stability.</li></ul>",
-        "news_summary": "<ul><li>Equities rally (best Thanksgiving week since 2008) suggests broad risk-on sentiment, inconsistent with crash signals.</li><li>No major news directly linked to Treasury auctions, China credit, or JPY carry-trade dynamics.</li><li>Notable consumer debt stress (e.g., $46K credit-card debt case) highlights micro risks, not macro triggers.</li></ul>"
+        "crash_analysis": "<ul><li><strong>Convergence Status: LOW</strong> - Only USD/JPY (155.64) shows a CRITICAL SHOCK signal. 10Y Treasury Auction (2.43x) and China Credit Proxy ($22.58) remain in NORMAL ranges.</li><li><strong>SIMULTANEOUS MOVEMENT:</strong> Yields (4.02%) and USD/CNH (7.0707) are stable. Only USD/JPY indicates stress, lacking full convergence.</li><li><strong>10Y AUCTION DEMAND:</strong> Bid-to-Cover (2.43x) is above stress threshold (2.3x), showing healthy auction demand.</li><li><strong>CHINA CREDIT STRESS:</strong> CBON ETF at $22.58 suggests no immediate LGFV/default risks.</li></ul>",
+        "news_summary": "<ul><li>Stock futures dip entering final trading month of 2025 after rocky November rally.</li><li>No headlines directly linking to Treasury, Japan carry-trade, or China credit shocks.</li><li>Consumer stress noted (credit-card debt vs. retirement savings dilemma).</li></ul>"
     },
-    "days_remaining": 362
+    "days_remaining": 361
 }

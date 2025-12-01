@@ -622,5 +622,67 @@
       "news_summary": "<ul><li>Equities rally (best Thanksgiving week since 2008) suggests broad risk-on sentiment, inconsistent with crash signals.</li><li>No major news directly linked to Treasury auctions, China credit, or JPY carry-trade dynamics.</li><li>Notable consumer debt stress (e.g., $46K credit-card debt case) highlights micro risks, not macro triggers.</li></ul>"
     },
     "days_remaining": 362
+  },
+  {
+    "last_update": "2025-12-01 06:28:32 UTC",
+    "risk_assessment": {
+      "score": 14.3,
+      "level": "LOW",
+      "color": "#28a745"
+    },
+    "convergence_score": {
+      "score": 0.0,
+      "status": "Low Convergence",
+      "details": ""
+    },
+    "metrics": [
+      {
+        "name": "10Y Treasury Auction Bid-to-Cover",
+        "value": "2.43x",
+        "signal": "NORMAL",
+        "desc": "Demand strength (Stress < 2.3x)"
+      },
+      {
+        "name": "30Y Auction Tail",
+        "value": "N/A",
+        "signal": "NORMAL",
+        "desc": "Dealer reluctance (Stress > 3bps)"
+      },
+      {
+        "name": "USD/JPY",
+        "value": "155.64",
+        "signal": "CRITICAL SHOCK",
+        "desc": "Carry-trade stress"
+      },
+      {
+        "name": "USD/CNH",
+        "value": "7.0707",
+        "signal": "NORMAL",
+        "desc": "Yuan stability"
+      },
+      {
+        "name": "China Credit Proxy (CBON)",
+        "value": "$22.58",
+        "signal": "NORMAL",
+        "desc": "VanEck China Bond ETF - Proxy for LGFV/Credit Stress"
+      },
+      {
+        "name": "10Y Treasury Yield",
+        "value": "4.02%",
+        "signal": "NORMAL",
+        "desc": "Systemic risk trigger"
+      },
+      {
+        "name": "MOVE Index",
+        "value": "68.95",
+        "signal": "NORMAL",
+        "desc": "Treasury volatility (Stress > 90)"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": "<ul><li><strong>Convergence Status: LOW</strong> - Only USD/JPY (155.64) shows a CRITICAL SHOCK signal. 10Y Treasury Auction (2.43x) and China Credit Proxy ($22.58) remain in NORMAL ranges.</li><li><strong>SIMULTANEOUS MOVEMENT:</strong> Yields (4.02%) and USD/CNH (7.0707) are stable. Only USD/JPY indicates stress, lacking full convergence.</li><li><strong>10Y AUCTION DEMAND:</strong> Bid-to-Cover (2.43x) is above stress threshold (2.3x), showing healthy auction demand.</li><li><strong>CHINA CREDIT STRESS:</strong> CBON ETF at $22.58 suggests no immediate LGFV/default risks.</li></ul>",
+      "news_summary": "<ul><li>Stock futures dip entering final trading month of 2025 after rocky November rally.</li><li>No headlines directly linking to Treasury, Japan carry-trade, or China credit shocks.</li><li>Consumer stress noted (credit-card debt vs. retirement savings dilemma).</li></ul>"
+    },
+    "days_remaining": 361
   }
 ]
