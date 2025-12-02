@@ -684,5 +684,67 @@
       "news_summary": "<ul><li>Stock futures dip entering final trading month of 2025 after rocky November rally.</li><li>No headlines directly linking to Treasury, Japan carry-trade, or China credit shocks.</li><li>Consumer stress noted (credit-card debt vs. retirement savings dilemma).</li></ul>"
     },
     "days_remaining": 361
+  },
+  {
+    "last_update": "2025-12-02 06:28:03 UTC",
+    "risk_assessment": {
+      "score": 14.3,
+      "level": "LOW",
+      "color": "#28a745"
+    },
+    "convergence_score": {
+      "score": 0.0,
+      "status": "Low Convergence",
+      "details": ""
+    },
+    "metrics": [
+      {
+        "name": "10Y Treasury Auction Bid-to-Cover",
+        "value": "2.43x",
+        "signal": "NORMAL",
+        "desc": "Demand strength (Stress < 2.3x)"
+      },
+      {
+        "name": "30Y Auction Tail",
+        "value": "N/A",
+        "signal": "NORMAL",
+        "desc": "Dealer reluctance (Stress > 3bps)"
+      },
+      {
+        "name": "USD/JPY",
+        "value": "155.78",
+        "signal": "CRITICAL SHOCK",
+        "desc": "Carry-trade stress"
+      },
+      {
+        "name": "USD/CNH",
+        "value": "7.0719",
+        "signal": "NORMAL",
+        "desc": "Yuan stability"
+      },
+      {
+        "name": "China Credit Proxy (CBON)",
+        "value": "$22.56",
+        "signal": "NORMAL",
+        "desc": "VanEck China Bond ETF - Proxy for LGFV/Credit Stress"
+      },
+      {
+        "name": "10Y Treasury Yield",
+        "value": "4.10%",
+        "signal": "NORMAL",
+        "desc": "Systemic risk trigger"
+      },
+      {
+        "name": "MOVE Index",
+        "value": "71.35",
+        "signal": "NORMAL",
+        "desc": "Treasury volatility (Stress > 90)"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": "<ul><li><strong>Convergence Status</strong>: LOW (No simultaneous stress signals detected)</li> <li><strong>US Treasury Funding</strong>: <span style='color:green'>NORMAL</span> (Bid-to-Cover at 2.43x > 2.3x stress threshold; 30Y Auction Tail unavailable)</li> <li><strong>Japan Carry-Trade Shock</strong>: <span style='color:red'>CRITICAL</span> (USD/JPY at 155.78; JPY depreciation may reflect unwinding pressure)</li> <li><strong>China Crisis</strong>: <span style='color:green'>NORMAL</span> (USD/CNH stable, CBON ETF shows no LGFV stress)</li> <li><strong>Key Missing Signals</strong>: No yield spike (10Y at 4.10%) or Yuan devaluation; isolated JPY stress insufficient</li></ul>",
+      "news_summary": "<ul><li>Stock markets (Dow, S&P 500, Nasdaq) declined alongside Bitcoin, signaling risk-off sentiment but no clear macro trigger.</li> <li>No news directly related to US Treasuries, Japan carry-trade dynamics, or China credit stress.</li></ul>"
+    },
+    "days_remaining": 360
   }
 ]
