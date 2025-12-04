@@ -808,5 +808,67 @@
       "news_summary": "<ul><li>Stock markets decline (Dow, S&P 500, Nasdaq) with Bitcoin volatility signaling risk-off sentiment.</li><li>Investors await Fed rate cuts despite unclear policy signals from central bank.</li><li>Savers increase cash holdings (e.g., ISAs) ahead of potential tax changes.</li><li>No major news directly impacting the three key convergence factors (Treasuries, JPY, China credit).</li></ul>"
     },
     "days_remaining": 359
+  },
+  {
+    "last_update": "2025-12-04 06:27:19 UTC",
+    "risk_assessment": {
+      "score": 14.3,
+      "level": "LOW",
+      "color": "#28a745"
+    },
+    "convergence_score": {
+      "score": 0.0,
+      "status": "Low Convergence",
+      "details": ""
+    },
+    "metrics": [
+      {
+        "name": "10Y Treasury Auction Bid-to-Cover",
+        "value": "2.43x",
+        "signal": "NORMAL",
+        "desc": "Demand strength (Stress < 2.3x)"
+      },
+      {
+        "name": "30Y Auction Tail",
+        "value": "N/A",
+        "signal": "NORMAL",
+        "desc": "Dealer reluctance (Stress > 3bps)"
+      },
+      {
+        "name": "USD/JPY",
+        "value": "155.35",
+        "signal": "CRITICAL SHOCK",
+        "desc": "Carry-trade stress"
+      },
+      {
+        "name": "USD/CNH",
+        "value": "7.0651",
+        "signal": "NORMAL",
+        "desc": "Yuan stability"
+      },
+      {
+        "name": "China Credit Proxy (CBON)",
+        "value": "$22.56",
+        "signal": "NORMAL",
+        "desc": "VanEck China Bond ETF - Proxy for LGFV/Credit Stress"
+      },
+      {
+        "name": "10Y Treasury Yield",
+        "value": "4.06%",
+        "signal": "NORMAL",
+        "desc": "Systemic risk trigger"
+      },
+      {
+        "name": "MOVE Index",
+        "value": "66.46",
+        "signal": "NORMAL",
+        "desc": "Treasury volatility (Stress > 90)"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": "<ul><li><strong>Convergence Status:</strong> Low Convergence (Score: 0.0) - All metrics except USD/JPY are in normal ranges, reducing systemic risk.</li><li><strong>Simultaneous Movement Check:</strong> Only USD/JPY (155.35) shows a CRITICAL SHOCK signal, while 10Y Treasury Yield (4.06%) and USD/CNH (7.0651) remain stable. No simultaneous stress across all three triggers.</li><li><strong>10Y Auction Bid-to-Cover:</strong> Demand is normal (2.43x vs. stress threshold < 2.3x), indicating healthy appetite for US Treasuries.</li><li><strong>China Credit Stress:</strong> LGFV proxy (CBON $22.56) shows no stress, suggesting stability in China's credit market.</li></ul>",
+      "news_summary": "<ul><li>Market news remains focused on speculative trends (AI stocks, M&A activity) rather than immediate systemic risks. Experts discuss long-term outlooks for stocks and gold in 2026, and fund managers highlight under-the-radar AI picks.</li><li>Salesforce and Amazon signal confidence in AI-driven growth, while Netflix and Paramount lead Warner Bros. acquisition talks, reflecting sector-specific optimism.</li></ul>"
+    },
+    "days_remaining": 358
   }
 ]
