@@ -870,5 +870,67 @@
       "news_summary": "<ul><li>Market news remains focused on speculative trends (AI stocks, M&A activity) rather than immediate systemic risks. Experts discuss long-term outlooks for stocks and gold in 2026, and fund managers highlight under-the-radar AI picks.</li><li>Salesforce and Amazon signal confidence in AI-driven growth, while Netflix and Paramount lead Warner Bros. acquisition talks, reflecting sector-specific optimism.</li></ul>"
     },
     "days_remaining": 358
+  },
+  {
+    "last_update": "2025-12-05 06:27:23 UTC",
+    "risk_assessment": {
+      "score": 10.7,
+      "level": "LOW",
+      "color": "#28a745"
+    },
+    "convergence_score": {
+      "score": 0.0,
+      "status": "Low Convergence",
+      "details": ""
+    },
+    "metrics": [
+      {
+        "name": "10Y Treasury Auction Bid-to-Cover",
+        "value": "2.43x",
+        "signal": "NORMAL",
+        "desc": "Demand strength (Stress < 2.3x)"
+      },
+      {
+        "name": "30Y Auction Tail",
+        "value": "N/A",
+        "signal": "NORMAL",
+        "desc": "Dealer reluctance (Stress > 3bps)"
+      },
+      {
+        "name": "USD/JPY",
+        "value": "154.68",
+        "signal": "HIGH STRESS",
+        "desc": "Carry-trade stress"
+      },
+      {
+        "name": "USD/CNH",
+        "value": "7.0664",
+        "signal": "NORMAL",
+        "desc": "Yuan stability"
+      },
+      {
+        "name": "China Credit Proxy (CBON)",
+        "value": "$22.52",
+        "signal": "NORMAL",
+        "desc": "VanEck China Bond ETF - Proxy for LGFV/Credit Stress"
+      },
+      {
+        "name": "10Y Treasury Yield",
+        "value": "4.11%",
+        "signal": "NORMAL",
+        "desc": "Systemic risk trigger"
+      },
+      {
+        "name": "MOVE Index",
+        "value": "65.69",
+        "signal": "NORMAL",
+        "desc": "Treasury volatility (Stress > 90)"
+      }
+    ],
+    "ai_insights": {
+      "crash_analysis": "AI Analysis Failed",
+      "news_summary": "Check Logs"
+    },
+    "days_remaining": 357
   }
 ]
